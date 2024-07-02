@@ -42,7 +42,7 @@ bool stringIsInt(const char string[]);
  * @param row Returns the converted row
  * @return If convertion is successful
  */
-bool inputConvertSeatFromFormatted(const char formattedInput[], int* column, int* row);
+bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* row);
 
 /**
  * Converts column and row to formatted string
