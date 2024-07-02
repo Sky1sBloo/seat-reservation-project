@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 			const char* column = argv[++i];
 			const char* row = argv[++i];
 
-			// Add input handler code here
+			inputMoveAccountSeat(fileName, column, row);
 		}
 		else if (strcmp(argv[i], "--clear-current-seat") == 0)
 		{
