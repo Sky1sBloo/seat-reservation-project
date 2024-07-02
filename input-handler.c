@@ -204,6 +204,7 @@ void inputClearAccountSeat(const char fileName[])
 	switch (plnError)
 	{
 		case PLN_SUCCESS:
+			printf("Cleared seat at %d, %d.\n", currentSeatColumn, currentSeatRow);
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
