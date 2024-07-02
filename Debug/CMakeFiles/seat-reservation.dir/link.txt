@@ -1,0 +1,1 @@
+/usr/bin/cc -O2 -g -DNDEBUG -rdynamic "CMakeFiles/seat-reservation.dir/main.c.o" "CMakeFiles/seat-reservation.dir/plane.c.o" "CMakeFiles/seat-reservation.dir/session.c.o" "CMakeFiles/seat-reservation.dir/account.c.o" "CMakeFiles/seat-reservation.dir/input-handler.c.o" -o seat-reservation
