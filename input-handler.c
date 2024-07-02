@@ -112,6 +112,21 @@ void inputRegister()
 	printf("The account ID is %d\n", newAccount.iD);
 }
 
+void viewAccountInformation()
+{
+	Account account;
+	
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Failed to find account information\n");
+		exit(1);
+	}
+
+	printf("ID: %d\n"
+			"Name: %s %s\n"
+			"Age: %d\n",
+			account.iD, account.firstName, account.lastName, account.age);
+}
 
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {

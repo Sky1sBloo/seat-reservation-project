@@ -22,6 +22,9 @@ void inputLogout();
 /// Creates a new account 
 void inputRegister();
 
+/// Views the account information
+void viewAccountInformation();
+
 /// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
