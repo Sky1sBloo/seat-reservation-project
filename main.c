@@ -18,6 +18,7 @@ void showHelpPrint()
 			"--display [filename]                       | Display current plane contents\n"
 			"--go-to-seat [filename] [column] [row]     | Goes to the seat of the plane\n"
 			"--clear-current-seat [filename]            | Clears the current seat assigned to the plane\n"
+			"--move-to-seat [filename] [column] [row]   | Moves to the new seat\n"
 			);
 
 }
@@ -80,6 +81,15 @@ int main(int argc, char* argv[])
 			
 
 			inputGoToSeat(fileName, column, row);
+		}
+		else if (strcmp(argv[i], "--move-to-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 3))  return 1;
+			const char* fileName = argv[++i];
+			const char* column = argv[++i];
+			const char* row = argv[++i];
+
+			// Add input handler code here
 		}
 		else if (strcmp(argv[i], "--clear-current-seat") == 0)
 		{
