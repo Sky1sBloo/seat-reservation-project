@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--go-to-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 3))  return 1;
 			const char* fileName = argv[++i];
 			const char* column = argv[++i];
 			const char* row = argv[++i];
