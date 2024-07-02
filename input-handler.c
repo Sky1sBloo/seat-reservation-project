@@ -292,7 +292,7 @@ bool stringIsInt(const char string[])
 	return true;
 }
 
-bool inputConvertSeatFromFormatted(const char formattedInput[], int* column, int* row)
+bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* row)
 {
 	if (strlen(formattedInput) != 2)  return false;
 
