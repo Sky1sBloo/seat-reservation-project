@@ -107,6 +107,7 @@ void inputRegister()
 	if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "Error: Failed to open account\n");
+		exit(-1);
 	}
 
 	printf("The account ID is %d\n", newAccount.iD);
