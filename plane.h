@@ -35,13 +35,23 @@ void printPlane(const Plane* plane);
 
 /**
  * Saves the plane into a dat file
+ *
+ * @param plane Saves current plane configuration to fileName
+ *
+ * @return
+ *  PLN_FILE_OPEN_FAILED - Failed to open file respect to file name
+ *  PLN_SUCCESS
  */
 PlaneErrors savePlane(const Plane* plane, const char* fileName);
 
 /**
- * Loads a new plane
+ * Loads a new plane and returns its data to loadedPlane
  *
- * @param loadedPlane empty struct where the loaded plane will return
+ * @param[out] loadedPlane Output of the plane in file
+ *
+ * @return
+ *  PLN_FILE_OPEN_FAILED
+ *  PLN_SUCCESS
  */
 PlaneErrors loadPlane(Plane* loadedPlane, const char* fileName);
 
@@ -49,16 +59,45 @@ PlaneErrors loadPlane(Plane* loadedPlane, const char* fileName);
  * Sets the seat flag to true on specified column and row
  * Note: Column and row starts from 0
  *
+ * @param[out] plane Output of plane after filling the seat
+ * @param[in] accountID Value that will be set to the seat, in this case accountID
+ *
+ * @return
+ *  PLN_OUT_OF_RANGE - Column or row is not within range of aircraft seats set on PLANE_COLUMN or PLANE_ROW
+ *  PLN_SEAT_FILLED - Target seat is occupied
+ *  PLN_SUCCESS
  */
 PlaneErrors getToSeat(Plane* plane, int accountID, int column, int row);
 
-// Clears the set seat
+/**
+ * Clears the seat of plane
+ *
+ * @param[out] plane Output of new plane after clearing the seat
+ *
+ * @return
+ *  PLN_OUT_OF_RANGE - Column or row is not within range of aircraft seats set on PLANE_COLUMN or PLANE_ROW
+ *  PLN_SEAT_NOT_FILLED - Target seat is not occupied for removal
+ *  PLN_SUCCESS
+ */
 PlaneErrors clearSeat(Plane* plane, int column, int row);
 
-// Moves the seat from previous to new
+/**
+ * Sets value of previous seat to new seat
+ * @param[out] plane Output of new plane after clearing the seat
+ * @param[in] prevColumn & prevRow Current seat to be copied
+ * @param[in] newColumn & newRow Target seat to be changed
+ *
+ * @return
+ *  PLN_OUT_OF_RANGE - Column or row is not within range of aircraft seats set on PLANE_COLUMN or PLANE_ROW
+ *  PLN_SEAT_NOT_FILLED - prev seats are not occupied 
+ *  PLN_SEAT_FILLED - target seats are occupied
+ */
 PlaneErrors moveSeat(Plane* plane, int prevColumn, int prevRow, int newColumn, int newRow);
 
-// Returns true if plane is full
+/**
+ * Checks if plane is full
+ *
+ * @return If plane is full
+ */
 bool isPlaneFull(const Plane* plane);
-
 
