@@ -138,7 +138,6 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 	int currentSeatColumn;
 	int currentSeatRow;
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
-	printf("%d, %d\n", currentSeatColumn, currentSeatRow);
 
 	if (currentSeatColumn != -1 || currentSeatRow != -1)
 	{
@@ -152,7 +151,7 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 	{
 		case PLN_SUCCESS:
 			savePlane(&currentPlane, fileName);
-			printf("Success!\n");
+			printf("Success! Moved seat to %s\n", seatPosition);
 			break;
 		case PLN_OUT_OF_RANGE:
 			fprintf(stderr, "Input out of range\n");
@@ -179,6 +178,8 @@ void inputClearAccountSeat(const char fileName[])
 	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
+	char currentSeatFormatted[2];  // For displaying formatted output when successful
+	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
 	{
@@ -199,7 +200,7 @@ void inputClearAccountSeat(const char fileName[])
 	switch (plnError)
 	{
 		case PLN_SUCCESS:
-			printf("Cleared seat at %d, %d.\n", currentSeatColumn, currentSeatRow);
+			printf("Success! Cleared seat at %s\n", currentSeatFormatted);
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
@@ -229,10 +230,13 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 	{
 		printf("Invalid seat input: %s\n", seatPosition);
 		exit(0);
-	}	
+	}
+
 	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
+	char currentSeatFormatted[2];  // For displaying formatted output when successful
+	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
 	{
@@ -253,7 +257,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 	switch (plnError)
 	{
 		case PLN_SUCCESS:
-			printf("Moved seat from %d, %d to %d, %d\n", currentSeatColumn, currentSeatRow, column, row);
+			printf("Success! Moved seat from %s to %s\n", currentSeatFormatted, seatPosition);
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
