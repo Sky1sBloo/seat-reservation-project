@@ -81,6 +81,12 @@ int main(int argc, char* argv[])
 
 			inputGoToSeat(fileName, column, row);
 		}
+		else if (strcmp(argv[i], "--clear-current-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 1))  return 1;
+
+			inputClearAccountSeat(argv[++i]);
+		}
 		else if (strcmp(argv[i], "--create") == 0)
 		{
 			if (!argumentIsSupplied(argc, i, 1))  return 1;
