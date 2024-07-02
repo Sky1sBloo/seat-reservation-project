@@ -112,8 +112,8 @@ PlaneErrors moveSeat(Plane* plane, int prevColumn, int prevRow, int newColumn, i
 	if (newColumn < 0 || newColumn >= PLANE_COLUMN) return PLN_OUT_OF_RANGE;
 	if (newRow < 0 || newRow >= PLANE_ROW) return PLN_OUT_OF_RANGE;
 
-	if (!plane->seats[prevColumn][prevRow]) return PLN_SEAT_NOT_FILLED;
-	if (plane->seats[newColumn][newRow]) return PLN_SEAT_FILLED;
+	if (plane->seats[prevColumn][prevRow] == -1) return PLN_SEAT_NOT_FILLED;
+	if (plane->seats[newColumn][newRow] != -1) return PLN_SEAT_FILLED;
 
 	plane->seats[newColumn][newRow] = plane->seats[prevColumn][prevRow];
 	plane->seats[prevColumn][prevRow] = -1;

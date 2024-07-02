@@ -219,6 +219,65 @@ void inputClearAccountSeat(const char fileName[])
 	}
 }
 
+void inputMoveAccountSeat(const char fileName[], const char inputColumn[], const char inputRow[])
+{
+	Plane currentPlane;
+	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "error: Failed to load plane\n");
+		exit(1);
+	}
+
+	if (!stringIsInt(inputColumn))
+	{
+		printf("Row is not an integer\n");
+		return;
+	}
+
+	int column = atoi(inputColumn);
+	int row = atoi(inputRow);
+	
+	Account accountInfo;
+	int currentSeatColumn;
+	int currentSeatRow;
+
+	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
+	{
+		fprintf(stderr, "Error: Failed to load session info\n");
+		exit(1);
+	}
+
+	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
+	
+	if (currentSeatColumn == -1 || currentSeatRow == -1)
+	{
+		printf("Account has no seat registered in this place\n");
+		return;
+	}
+
+	PlaneErrors plnError = moveSeat(&currentPlane, currentSeatColumn, currentSeatRow, column, row);
+
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			printf("Moved seat from %d, %d to %d, %d\n", currentSeatColumn, currentSeatRow, column, row);
+			savePlane(&currentPlane, fileName);
+			break;
+		case PLN_OUT_OF_RANGE:
+			printf("Seat is out of range\n");
+			break;
+		case PLN_SEAT_FILLED:
+			printf("New seat is filled\n");
+			break;
+		case PLN_SEAT_NOT_FILLED:
+			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
+			exit(1);
+		default:
+			fprintf(stderr, "Error: Failed to move seat\n");
+			exit(1);
+			break;
+	}
+}
 
 bool stringIsInt(const char string[])
 {
