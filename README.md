@@ -14,11 +14,15 @@ For list of commands
 ```
 --register
 ```
-Interface for registration, saves to `session.dat`. Take note of your accountID after registration
+Interface for registration, saves to `accounts.dat`. Take note of your accountID after registration
 ```
 --login [accountID] [password]
 ```
-Logs in user based on `session.dat`.
+Logs in user and saves session to `session.dat`.
+```
+--logout
+```
+Logs out user and removes `session.dat`.
 ```
 --create [filename]
 ```
