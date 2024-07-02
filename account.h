@@ -31,7 +31,6 @@ AccountError createNewAccount(const char* firstName, const char* lastName, const
 int getNewAccountID();
 
 AccountError loginAccount(int accountID, const char* password, Account* account);
-AccountError logoutAccount(int accountID);
 
 AccountError changeAccountFirstName(Account* account, const char* newFirstName);
 
