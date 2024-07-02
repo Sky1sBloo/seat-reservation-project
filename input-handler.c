@@ -174,6 +174,13 @@ void inputGoToSeat(const char fileName[], const char inputColumn[], const char i
 
 void inputClearAccountSeat(const char fileName[])
 {
+	Plane currentPlane;
+	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "error: Failed to load plane\n");
+		exit(1);
+	}
+
 	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
@@ -181,9 +188,34 @@ void inputClearAccountSeat(const char fileName[])
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
+		exit(1);
 	}
 
+	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
+	
+	if (currentSeatColumn == -1 || currentSeatRow == -1)
+	{
+		printf("Account has no seat registered in this place\n");
+		return;
+	}
 
+	PlaneErrors plnError = clearSeat(&currentPlane, currentSeatColumn, currentSeatRow);
+
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			savePlane(&currentPlane, fileName);
+			break;
+		case PLN_OUT_OF_RANGE:
+			printf("Seat is out of range\n");
+			break;
+		case PLN_SEAT_NOT_FILLED:
+			printf("Seat is not filled\n");
+			break;
+		default:
+			fprintf(stderr, "Error: Clear seat on %d, %d failed\n", currentSeatColumn, currentSeatRow);
+			break;
+	}
 }
 
 
