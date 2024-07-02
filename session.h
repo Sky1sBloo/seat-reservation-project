@@ -1,7 +1,7 @@
 /*
  * Basic session saving for login by JD
  *
- *
+ * Supports any data type
  */
 #pragma once
 
@@ -18,17 +18,32 @@ typedef enum
 } SessionError;
 
 /**
- * Saves session to SESSION_FILE name
+ * Saves session to SESSION_FILE
+ *
+ * @return
+ *  SS_FILE_CREATE_FAILED - Failed to create SESSION_FILE
+ *  SS_SUCCESS
  */
 SessionError saveSession(const void* sessionInfo, size_t size);
 
 /**
  * Loads active session info
+ *
+ * @param[out] sessionInfo Output session after loading from SESSION_FILE
+ *
+ * @return
+ *   SS_FILE_OPEN_FAILED - Failed to read SESSION_FILE
+ *   SS_SUCCESS
  */
 SessionError loadSessionInfo(void* sessionInfo, size_t size);
 
 /**
- * Removes active session
+ * Removes SESSION_FILE
  * (Logout)
+ *
+ * @return
+ *  SS_NO_ACTIVE_SESSION_FOUND - Failed to find SESSION_FILE
+ *  SS_FILE_REMOVE_FAILED - Failed to remove SESSION_FILE
+ *  SS_SUCCESS
  */
 SessionError removeSession();
