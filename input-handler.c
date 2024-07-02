@@ -297,7 +297,7 @@ bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* ro
 	if (strlen(formattedInput) != 2)  return false;
 
 
-	if (!isalpha(formattedInput[0]) || !isalpha(formattedInput[1]))  return false;
+	if (!isalpha(formattedInput[1]))  return false;
 
 	char formattedRow = toupper(formattedInput[0]);
 	char formattedColumn = toupper(formattedInput[1]);
