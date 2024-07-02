@@ -182,6 +182,8 @@ void inputClearAccountSeat(const char fileName[])
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
 	}
+
+
 }
 
 

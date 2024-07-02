@@ -1,3 +1,0 @@
-/home/jdp/school-programs/seat-reservation/Debug/CMakeFiles/seat-reservation.dir
-/home/jdp/school-programs/seat-reservation/Debug/CMakeFiles/edit_cache.dir
-/home/jdp/school-programs/seat-reservation/Debug/CMakeFiles/rebuild_cache.dir
