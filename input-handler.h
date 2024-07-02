@@ -7,31 +7,31 @@
 #include "account.h"
 #include "plane.h"
 
-
+/// Prints filled seat in plane
 void inputDisplayPlane(const char fileName[]);
 
-// Creates/overrites a new plane
+/// Creates/overrites a new plane
 void inputCreatePlane(const char filename[]);
 
-// TODO: Add input sanitizer
+/// Logs in user
 void inputLogin(const char accountID[], const char password[]);
 
-// Logs the account
+/// Logs out the account
 void inputLogout();
 
-// Creates a new account 
+/// Creates a new account 
 void inputRegister();
 
-// Sets user to seat
+/// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
-// Removes current setted seat of account
+/// Removes current setted seat of account
 void inputClearAccountSeat(const char fileName[]);
 
-// Moves account seat to new area
+/// Moves account seat to new area
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
 
-// Checks if the string is a number (positive)
+/// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
 
 /** 
