@@ -23,13 +23,13 @@ void inputLogout();
 void inputRegister();
 
 // Sets user to seat
-void inputGoToSeat(const char fileName[], const char inputColumn[], const char inputRow[]);
+void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
 // Removes current setted seat of account
 void inputClearAccountSeat(const char fileName[]);
 
 // Moves account seat to new area
-void inputMoveAccountSeat(const char fileName[], const char inputColumn[], const char inputRow[]);
+void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
 
 // Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);

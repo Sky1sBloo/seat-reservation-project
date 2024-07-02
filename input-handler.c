@@ -112,21 +112,8 @@ void inputRegister()
 		printf("The account ID is %d\n", newAccount.iD);
 }
 
-void inputGoToSeat(const char fileName[], const char inputColumn[], const char inputRow[])
+void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
-	if (!stringIsInt(inputColumn))
-	{
-		printf("Column is not an integer\n");
-		return;
-	}
-	if (!stringIsInt(inputRow))
-	{
-		printf("Row is not an integer\n");
-		return;
-	}
-
-	int column = atoi(inputColumn);
-	int row = atoi(inputRow);
 	Account accountInfo;
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
 	{
@@ -139,6 +126,13 @@ void inputGoToSeat(const char fileName[], const char inputColumn[], const char i
 	{
 		fprintf(stderr, "Error: Failed to load plane\n");
 		exit(1);
+	}
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		printf("Invalid seat input: %s\n", seatPosition);
+		exit(0);
 	}
 	
 	int currentSeatColumn;
@@ -220,7 +214,7 @@ void inputClearAccountSeat(const char fileName[])
 	}
 }
 
-void inputMoveAccountSeat(const char fileName[], const char inputColumn[], const char inputRow[])
+void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 {
 	Plane currentPlane;
 	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
@@ -229,15 +223,13 @@ void inputMoveAccountSeat(const char fileName[], const char inputColumn[], const
 		exit(1);
 	}
 
-	if (!stringIsInt(inputColumn))
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
-		printf("Row is not an integer\n");
-		return;
-	}
-
-	int column = atoi(inputColumn);
-	int row = atoi(inputRow);
-	
+		printf("Invalid seat input: %s\n", seatPosition);
+		exit(0);
+	}	
 	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
