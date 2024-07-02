@@ -129,6 +129,34 @@ void viewAccountInformation()
 			account.iD, account.firstName, account.lastName, account.age);
 }
 
+void changeAccountName(const char firstName[], const char lastName[])
+{	
+	Account account;
+	
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Failed to find account information\n");
+		exit(1);
+	}
+
+	if (changeAccountFirstName(&account, firstName) == AE_INPUT_TOO_LONG)
+	{
+		printf("First name too long\n");
+		exit(1);
+	}
+	if (changeAccountLastName(&account, lastName) == AE_INPUT_TOO_LONG)
+	{
+		printf("Last name too long\n");
+		exit(1);
+	}
+
+	if (saveSession(&account, sizeof(Account)) == SS_FILE_CREATE_FAILED)
+	{
+		fprintf(stderr, "Failed to create file\n");
+		exit(-1);
+	}
+}
+
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
 	Account accountInfo;
