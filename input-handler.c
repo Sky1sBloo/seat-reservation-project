@@ -92,25 +92,26 @@ void inputLogout()
 
 void inputRegister()
 {
-		Account newAccount;
-		int newAccountID = getNewAccountID();
+	Account newAccount;
+	int newAccountID = getNewAccountID();
 
-		printf("First Name: ");
-		scanf("%50s", newAccount.firstName);
-		printf("Last Name: ");
-		scanf("%50s", newAccount.lastName);
-		printf("Age: ");
-		scanf("%hhu", &newAccount.age);
-		printf("Password: ");
-		scanf("%255s", newAccount.password);
+	printf("First Name: ");
+	scanf("%50s", newAccount.firstName);
+	printf("Last Name: ");
+	scanf("%50s", newAccount.lastName);
+	printf("Age: ");
+	scanf("%hhu", &newAccount.age);
+	printf("Password: ");
+	scanf("%255s", newAccount.password);
 
-		if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
-		{
-			fprintf(stderr, "Error: Failed to open account\n");
-		}
+	if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to open account\n");
+	}
 
-		printf("The account ID is %d\n", newAccount.iD);
+	printf("The account ID is %d\n", newAccount.iD);
 }
+
 
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
