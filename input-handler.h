@@ -34,6 +34,25 @@ void inputMoveAccountSeat(const char fileName[], const char inputColumn[], const
 // Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
 
+/** 
+ * Converts formatted string to input and row
+ * ex. 3A -> 2, 0
+ *
+ * @param column Returns the converted column
+ * @param row Returns the converted row
+ * @return If convertion is successful
+ */
+bool inputConvertSeatFromFormatted(const char formattedInput[], int* column, int* row);
+
+/**
+ * Converts column and row to formatted string
+ * ex. 2, 0 -> 3A
+ *
+ * @param formattedInput returns the formatted version of seat, excluding null terminator
+ * @return If convertion is successful
+ */
+void inputConvertSeatToFormatted(int column, int row, char formattedInput[2]);
+
 /**
  * Retrieves current seat of account
  *

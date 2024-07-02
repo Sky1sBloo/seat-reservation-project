@@ -1,4 +1,5 @@
 #include "input-handler.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -289,6 +290,28 @@ bool stringIsInt(const char string[])
 	}
 
 	return true;
+}
+
+bool inputConvertSeatFromFormatted(const char formattedInput[], int* column, int* row)
+{
+	if (strlen(formattedInput) != 2)  return false;
+
+
+	if (!isalpha(formattedInput[0]) || !isalpha(formattedInput[1]))  return false;
+
+	char formattedRow = toupper(formattedInput[0]);
+	char formattedColumn = toupper(formattedInput[1]);
+
+	*row = formattedRow - '0' - 1;
+	*column = formattedColumn - 'A';
+
+	return true;
+}
+
+void inputConvertSeatToFormatted(int column, int row, char formattedInput[2])
+{
+	formattedInput[0] = row + 1 + '0';
+	formattedInput[1] = column + 'A';
 }
 
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row)
