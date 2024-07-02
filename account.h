@@ -26,19 +26,46 @@ typedef enum
 } AccountError;
 
 /**
+ * Creates a new account, sets its ID based on getNewAccountID()
+ *
+ * @param[out] newAccount Output struct of the new account
+ * 
+ * @return
+ *  AE_FILE_OPEN_FAILED - Failed to create/append on ACCOUNT_FILE
+ *  AE_SUCCESS
  */
 AccountError createNewAccount(const char* firstName, const char* lastName, const char* password, unsigned char age, Account* newAccount);
+
+/**
+ * Creates a new account ID based on ACCOUNT_FILE
+ *
+ * @return Current highest ID in ACCOUNT_FILE + 1
+ */
 int getNewAccountID();
 
+/**
+ * Checks password if matches with userID based on ACCOUNT_FILE
+ *
+ * @param[out] account Output struct when login is successful
+ *
+ * @return
+ *  AE_FILE_OPEN_FAILED - Failed to read ACCOUNT_FILE
+ *  AE_WRONG_USER_OR_PASSWORD - Invalid account details
+ *  AE_SUCCESS
+ */
 AccountError loginAccount(int accountID, const char* password, Account* account);
 
+/// Changes account first name
 AccountError changeAccountFirstName(Account* account, const char* newFirstName);
 
-
+/// Changes account last name
 AccountError changeAccountLastName(Account* account, const char* newLastName);
 
+/// Changes account password
 AccountError changeAccountPassword(Account* account, const char* newPassword);
 
+/// Changes account age
 AccountError changeAccountAge(Account* account, unsigned char newAge);
 
+/// Views all possible accounts and their information
 void listAllAccounts();
