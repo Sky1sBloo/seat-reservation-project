@@ -7,6 +7,12 @@
 #include "account.h"
 #include "plane.h"
 
+#define FILE_WRITE_ERROR 2
+#define FILE_READ_ERROR 3
+#define FILE_ERROR 4
+#define INPUT_ERROR 5
+
+
 /// Prints filled seat in plane
 void inputDisplayPlane(const char fileName[]);
 
