@@ -20,9 +20,12 @@ void showHelpPrint()
 			"--change-account-name [first] [lastname]   | Changes account username\n"
 			"--change-account-password [old] [new]      | Changes account password\n"
 			"--change-account-age [age]                 | Change account age\n\n\n\n"
+			"Requires administrator privilages:\n"
 			"--debug-show-accounts                      | Lists all accounts\n"
-			"--toggle-seat [filename] [seat]            | Toggle seats active (Removes user data)\n"
+			"--enable-seat [filename] [seat]            | enables seats to be active \n"
+			"--disable-seat [filename] [seat]           | disables seats\n"
 			"--view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
+			"--debug-make-admin [userID]                | Makes userID admin\n"
 			);
 
 }
