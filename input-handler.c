@@ -194,6 +194,47 @@ void inputChangeAccountName(const char firstName[], const char lastName[])
 	}
 }
 
+void inputChangeAccountPassword(const char oldPassword[], const char newPassword[])
+{
+	// Check if login
+ 	Account sessionInfo;
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+ 	{
+ 		fprintf(stderr, "There is no session found. Login first.\n");
+		exit(1);
+ 	}
+
+ 	AccountError loginError;
+
+ 	loginError = loginAccount(sessionInfo.iD, oldPassword, &sessionInfo);
+ 
+ 	switch (loginError)
+ 	{
+ 		case AE_SUCCESS:
+ 			break;
+ 		case AE_WRONG_USER_OR_PASSWORD:
+ 			printf("Wrong user or password\n");
+ 		case AE_FILE_OPEN_FAILED:
+ 			fprintf(stderr, "Account file failed to open\n");
+			exit(1);
+ 		default:
+ 			fprintf(stderr, "Error: Login error returns wrong\n");
+			exit(-1);
+			break;
+ 	}
+
+	if (changeAccountPassword(&sessionInfo, newPassword) == AE_INPUT_TOO_LONG)
+	{
+		fprintf(stderr, "Input too long\n");
+		exit(1);
+	}
+
+	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
+	{
+		printf("Successfully updated password of %d\n", sessionInfo.iD);
+	}
+}
+
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
 	Account accountInfo;

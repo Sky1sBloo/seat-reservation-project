@@ -142,6 +142,8 @@ int main(int argc, char* argv[])
 
 			const char* oldPassword = argv[++i];
 			const char* newPassword = argv[++i];
+
+			inputChangeAccountPassword(oldPassword, newPassword);
 		}
 		else if (strcmp(argv[i], "--change-account-age") == 0)
 		{
