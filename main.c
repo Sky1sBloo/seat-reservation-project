@@ -21,6 +21,8 @@ void showHelpPrint()
 			"--change-account-password [old] [new]      | Changes account password\n"
 			"--change-account-age [age]                 | Change account age\n\n\n\n"
 			"--debug-show-accounts                      | Lists all accounts\n"
+			"--toggle-seat [filename] [seat]            | Toggle seats active (Removes user data)\n"
+			"--view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
 			);
 
 }
