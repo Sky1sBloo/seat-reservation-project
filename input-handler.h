@@ -56,6 +56,8 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
 /// Disables seat (requires admin privilages)
 void inputDisableSeat(const char fileName[], const char seatPosition[]);
 
+/// Enables seat
+void inputEnableSeat(const char fileName[], const char seatPosition[]);
 /// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
 
@@ -101,3 +103,6 @@ void inputLoadSessionInfo(Account* sessionInfo);
  * @param[out] sessionInfo Output data from session
  */
 void inputLoadPlane(Plane* plane, const char fileName[]);
+
+/// Makes current user admin
+void inputDebugMakeAdmin();

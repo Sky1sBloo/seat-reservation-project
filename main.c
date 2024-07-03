@@ -157,6 +157,26 @@ int main(int argc, char* argv[])
 		{
 			listAllAccounts();
 		}
+		else if (strcmp(argv[i], "--enable-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputEnableSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--disable-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputDisableSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--debug-make-admin") == 0)
+		{
+			inputDebugMakeAdmin();
+		}
 		else
 		{
 			showHelpPrint();

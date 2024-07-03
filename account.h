@@ -122,3 +122,12 @@ AccountError changeAccountAge(Account* account, unsigned char newAge);
 
 /// Views all possible accounts and their information
 void listAllAccounts();
+
+/** 
+ * Makes the account have admin privilages
+ *
+ * @return
+ *  AE_FILE_OPEN_FAILED
+ *  AE_SUCCESS
+ */
+AccountError debugMakeAccountAdmin(int accountID);

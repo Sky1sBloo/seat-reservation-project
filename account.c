@@ -172,3 +172,24 @@ void listAllAccounts()
 	
 	fclose(accountFile);
 }
+
+AccountError debugMakeAccountAdmin(int accountID)
+{
+	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");
+
+	if (accountFile == NULL)
+	{
+		return AE_FILE_OPEN_FAILED;
+	}
+
+	Account iAccount;
+	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
+	{
+		if (iAccount.iD == accountID)
+		{
+			iAccount.isAdmin = true;
+		}
+	}
+
+	return AE_SUCCESS;
+}

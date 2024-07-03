@@ -457,6 +457,48 @@ void inputDisableSeat(const char fileName[], const char seatPosition[])
 	}
 }
 
+void inputEnableSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	Plane currentPlane;
+	inputLoadPlane(&currentPlane, seatPosition);
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		printf("Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+
+	PlaneErrors plnError = getToSeat(&currentPlane, -2, column, row);
+
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			savePlane(&currentPlane, fileName);
+			printf("Success! Moved seat to %s\n", seatPosition);
+			break;
+		case PLN_OUT_OF_RANGE:
+			fprintf(stderr, "Input out of range\n");
+			exit(INPUT_ERROR);
+		case PLN_SEAT_FILLED:
+			fprintf(stderr, "Seat filled \n");
+			exit(INPUT_ERROR);
+		default:
+			fprintf(stderr, "Error: Get to seat failed\n");
+			exit(-1);
+	}
+}
+
 bool stringIsInt(const char string[])
 {
 	int length = strlen(string);
@@ -523,6 +565,19 @@ void inputLoadPlane(Plane* plane, const char fileName[])
 	if (loadPlane(plane, fileName) == PLN_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "Error: Failed to load plane\n");
+		exit(FILE_READ_ERROR);
+	}
+}
+
+
+void inputDebugMakeAdmin()
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (debugMakeAccountAdmin(sessionInfo.iD) == AE_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to open account file\n");
 		exit(FILE_READ_ERROR);
 	}
 }
