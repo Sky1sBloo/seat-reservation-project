@@ -581,3 +581,18 @@ void inputDebugMakeAdmin()
 		exit(FILE_READ_ERROR);
 	}
 }
+
+void inputShowAccounts()
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	listAllAccounts();
+}
+

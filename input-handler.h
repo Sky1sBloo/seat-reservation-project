@@ -106,3 +106,5 @@ void inputLoadPlane(Plane* plane, const char fileName[]);
 
 /// Makes current user admin
 void inputDebugMakeAdmin();
+
+void inputShowAccounts();

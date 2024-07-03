@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
 		{
-			listAllAccounts();
+			inputShowAccounts();
 		}
 		else if (strcmp(argv[i], "--enable-seat") == 0)
 		{
