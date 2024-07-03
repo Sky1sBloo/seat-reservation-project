@@ -43,7 +43,7 @@ void showMissingArgumentsMessage()
  */
 bool argumentIsSupplied(int argc, int index, int numOfReqArgs)
 {
-	if (argc - (index - numOfReqArgs) <= 0)
+	if (argc < (index + numOfReqArgs + 1))
 	{
 		showMissingArgumentsMessage();
 		return false;
