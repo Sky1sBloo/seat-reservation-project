@@ -5,10 +5,6 @@
 #include "account.h"
 #include "input-handler.h"
 
-// TODO: Fix incomplete argument
-// TODO: Change age to birthday system
-// TODO: Fix account modification system
-// TODO: Fix documentation system on input-handler.h
 void showHelpPrint()
 {
 	printf("--help                         		   | List help commands\n"
