@@ -117,7 +117,7 @@ void viewAccountInformation()
 {
 	Account account;
 	
-	if (loadSessionInfo(&account, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Failed to find account information\n");
 		exit(1);
@@ -165,7 +165,7 @@ void inputChangeAccountName(const char firstName[], const char lastName[])
 {	
 	Account account;
 	
-	if (loadSessionInfo(&account, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error to find account information\n");
 		exit(1);
@@ -182,7 +182,7 @@ void inputChangeAccountName(const char firstName[], const char lastName[])
 		exit(1);
 	}
 
-	if (saveSession(&account, sizeof(Account)) == SS_FILE_CREATE_FAILED)
+	if (saveSession(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error: Failed to update session file\n");
 		exit(-1);
@@ -198,7 +198,7 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
 {
 	// Check if login
  	Account sessionInfo;
- 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There is no session found. Login first.\n");
 		exit(1);
@@ -254,7 +254,7 @@ void inputChangeAccountAge(const char newAge[])
 	}
 	
 	Account sessionInfo;	
- 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There is no session found. Login first.\n");
 		exit(1);
