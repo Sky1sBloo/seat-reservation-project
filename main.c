@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--view-account-information") == 0)
 		{
-			
+			viewAccountInformation();
 		}
 		else if (strcmp(argv[i], "--change-account-name") == 0)
 		{
