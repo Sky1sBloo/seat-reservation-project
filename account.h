@@ -5,6 +5,7 @@
 #pragma once
 
 #define ACCOUNT_FILE "accounts.dat"
+#define ACCOUNT_UPDATE_FILE "account-temp.dat"  // Name of the new file when updated (gets quickly removed)
 #define NAME_LENGTH 50
 #define PASSWORD_LENGTH 255
 
@@ -21,6 +22,9 @@ typedef enum
 	AE_SUCCESS,
 	AE_WRONG_USER_OR_PASSWORD,
 	AE_FILE_OPEN_FAILED,
+	AE_FILE_CREATE_FAILED,
+	AE_FILE_REMOVE_FAILED,
+	AE_FILE_RENAME_FAILED,
 	AE_INPUT_TOO_LONG
 } AccountError;
 
@@ -34,6 +38,21 @@ typedef enum
  *  AE_SUCCESS
  */
 AccountError createNewAccount(const char* firstName, const char* lastName, const char* password, unsigned char age, Account* newAccount);
+
+/**
+ * Updates new account based on accountID
+ *
+ * @param accountID of user to be replaced
+ * @param newAccount that will be replaced
+ *
+ * @return
+ *  AE_FILE_OPEN_FAILED Failed to read existing ACCOUNT_FILE
+ *  AE_FILE_CREATE_FAILED Failed to create new ACCOUNT_FILE
+ *  AE_FILE_REMOVE_FAILED Failed to remove old ACCOUNT_FILE
+ *  AE_FILE_RENAME_FAILED Failed to rename ACCOUNT_UPDATE_FILE to ACCOUNT_FILE
+ *  AE_SUCCESS
+ */
+AccountError updateAccount(int accountID, const Account* newAccount);
 
 /**
  * Creates a new account ID based on ACCOUNT_FILE

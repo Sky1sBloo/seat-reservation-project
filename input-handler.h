@@ -22,6 +22,21 @@ void inputLogout();
 /// Creates a new account 
 void inputRegister();
 
+/// Views the account information
+void viewAccountInformation();
+
+/// Calls update account with error messages and exits if failes
+bool updateInputAccount(int accountID, const Account* newAccount);
+
+/// Changes accoount name
+void inputChangeAccountName(const char firstName[], const char lastName[]);
+
+/// Changes account password with verification
+void inputChangeAccountPassword(const char oldPassword[], const char newPassword[]);
+
+/// Changes account age
+void inputChangeAccountAge(const char newAge[]);
+
 /// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
@@ -62,3 +77,4 @@ void inputConvertSeatToFormatted(int column, int row, char formattedInput[2]);
  * @param row Row of account seat, returns -1 when it cannot be found
  */
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row);
+

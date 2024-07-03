@@ -26,6 +26,52 @@ AccountError createNewAccount(const char* firstName, const char* lastName, const
 	return AE_SUCCESS;
 }
 
+AccountError updateAccount(int accountID, const Account* newAccount)
+{
+	FILE* oldAccountFile;
+	oldAccountFile = fopen(ACCOUNT_FILE, "rb");
+
+	if (oldAccountFile == NULL)
+	{
+		return AE_FILE_OPEN_FAILED;
+	}
+
+	FILE* newAccountFile;
+	newAccountFile = fopen(ACCOUNT_UPDATE_FILE, "wb");
+
+	if (newAccountFile == NULL)
+	{
+		return AE_FILE_CREATE_FAILED;
+	}
+
+	Account iAccount;
+	while (fread(&iAccount, sizeof(Account), 1, oldAccountFile) > 0)
+	{
+		if (iAccount.iD == accountID)
+		{
+			fwrite(newAccount, sizeof(Account), 1, newAccountFile);
+		}
+		else
+		{
+			fwrite(&iAccount, sizeof(Account), 1, newAccountFile);
+		}
+	}
+
+	fclose(oldAccountFile);
+	fclose(newAccountFile);
+
+	if (remove(ACCOUNT_FILE) == -1)
+	{
+		return AE_FILE_REMOVE_FAILED;
+	}
+	if (rename(ACCOUNT_UPDATE_FILE, ACCOUNT_FILE) == -1)
+	{
+		return AE_FILE_RENAME_FAILED;
+	}
+
+	return AE_SUCCESS;
+}
+
 AccountError loginAccount(int accountID, const char* password, Account* account)
 {
 	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");

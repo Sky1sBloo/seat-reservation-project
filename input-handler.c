@@ -92,24 +92,186 @@ void inputLogout()
 
 void inputRegister()
 {
-		Account newAccount;
-		int newAccountID = getNewAccountID();
+	Account newAccount;
+	int newAccountID = getNewAccountID();
 
-		printf("First Name: ");
-		scanf("%50s", newAccount.firstName);
-		printf("Last Name: ");
-		scanf("%50s", newAccount.lastName);
-		printf("Age: ");
-		scanf("%hhu", &newAccount.age);
-		printf("Password: ");
-		scanf("%255s", newAccount.password);
+	printf("First Name: ");
+	scanf("%50s", newAccount.firstName);
+	printf("Last Name: ");
+	scanf("%50s", newAccount.lastName);
+	printf("Age: ");
+	scanf("%hhu", &newAccount.age);
+	printf("Password: ");
+	scanf("%255s", newAccount.password);
 
-		if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
-		{
-			fprintf(stderr, "Error: Failed to open account\n");
-		}
+	if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to open account\n");
+		exit(-1);
+	}
 
-		printf("The account ID is %d\n", newAccount.iD);
+	printf("The account ID is %d\n", newAccount.iD);
+}
+
+void viewAccountInformation()
+{
+	Account account;
+	
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+	{
+		fprintf(stderr, "Failed to find account information\n");
+		exit(1);
+	}
+
+	printf("ID: %d\n"
+			"Name: %s %s\n"
+			"Age: %d\n",
+			account.iD, account.firstName, account.lastName, account.age);
+}
+
+bool updateInputAccount(int accountID, const Account* newAccount)
+{
+	AccountError updateError = updateAccount(accountID, newAccount);
+
+	switch (updateError)
+	{
+		case AE_SUCCESS:
+			break;
+		case AE_FILE_OPEN_FAILED:
+			fprintf(stderr, "Error: Failed to open Account file\n");
+			exit(1);
+			break;
+		case AE_FILE_CREATE_FAILED:
+			fprintf(stderr, "Error: Failed to create Account Update File\n");
+			exit(-1);
+			break;
+		case AE_FILE_REMOVE_FAILED:
+			fprintf(stderr, "Error: Failed to remove old account file\n");
+			exit(-1);
+			break;
+		case AE_FILE_RENAME_FAILED:
+			fprintf(stderr, "Error: Failed to rename Account Update File\n");
+			exit(-1);
+			break;
+		default:
+			fprintf(stderr, "Error: Failed to update account\n");
+			exit(-1);
+			break;
+	}
+	return true;
+}
+
+void inputChangeAccountName(const char firstName[], const char lastName[])
+{	
+	Account account;
+	
+	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+	{
+		fprintf(stderr, "Error to find account information\n");
+		exit(1);
+	}
+
+	if (changeAccountFirstName(&account, firstName) == AE_INPUT_TOO_LONG)
+	{
+		printf("First name too long\n");
+		exit(1);
+	}
+	if (changeAccountLastName(&account, lastName) == AE_INPUT_TOO_LONG)
+	{
+		printf("Last name too long\n");
+		exit(1);
+	}
+
+	if (saveSession(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+	{
+		fprintf(stderr, "Error: Failed to update session file\n");
+		exit(-1);
+	}
+
+	if (updateInputAccount(account.iD, &account))
+	{
+		printf("Successfuly updated ID: %d, to %s %s\n", account.iD, firstName, lastName);
+	}
+}
+
+void inputChangeAccountPassword(const char oldPassword[], const char newPassword[])
+{
+	// Check if login
+ 	Account sessionInfo;
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+ 	{
+ 		fprintf(stderr, "There is no session found. Login first.\n");
+		exit(1);
+ 	}
+
+ 	AccountError loginError;
+
+ 	loginError = loginAccount(sessionInfo.iD, oldPassword, &sessionInfo);
+ 
+ 	switch (loginError)
+ 	{
+ 		case AE_SUCCESS:
+ 			break;
+ 		case AE_WRONG_USER_OR_PASSWORD:
+ 			printf("Wrong user or password\n");
+ 		case AE_FILE_OPEN_FAILED:
+ 			fprintf(stderr, "Account file failed to open\n");
+			exit(1);
+ 		default:
+ 			fprintf(stderr, "Error: Login error returns wrong\n");
+			exit(-1);
+			break;
+ 	}
+
+	if (changeAccountPassword(&sessionInfo, newPassword) == AE_INPUT_TOO_LONG)
+	{
+		fprintf(stderr, "Input too long\n");
+		exit(1);
+	}
+
+
+
+	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
+	{
+		printf("Successfully updated password of User %d\n", sessionInfo.iD);
+	}
+}
+
+void inputChangeAccountAge(const char newAge[])
+{
+	if (!stringIsInt(newAge) || strlen(newAge) > 3)
+	{
+		fprintf(stderr, "Error: Input is not a number or too long\n");
+		exit(1);
+	}
+
+	int age = atoi(newAge);
+
+	if (age > 255)
+	{
+		fprintf(stderr, "Error: Input is not a number or too long\n");
+		exit(1);
+	}
+	
+	Account sessionInfo;	
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+ 	{
+ 		fprintf(stderr, "There is no session found. Login first.\n");
+		exit(1);
+ 	}
+
+
+	changeAccountAge(&sessionInfo, (unsigned char) age);
+	if (saveSession(&sessionInfo, sizeof(Account)) == SS_FILE_CREATE_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to update session\n");
+		exit(-1);
+	}
+
+	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
+	{
+		printf("Successfuly updated age of User %d\n", sessionInfo.iD);
+	}
 }
 
 void inputGoToSeat(const char fileName[], const char seatPosition[])

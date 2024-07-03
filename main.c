@@ -5,9 +5,6 @@
 #include "account.h"
 #include "input-handler.h"
 
-// TODO: Do input filtering especially on number conversion
-// TODO: Malloc accountID and pointers
-// TODO: Fix possible file errors
 void showHelpPrint()
 {
 	printf("--help                         		   | List help commands\n"
@@ -19,6 +16,10 @@ void showHelpPrint()
 			"--go-to-seat [filename] [seat]             | Goes to the seat of the plane\n"
 			"--clear-current-seat [filename]            | Clears the current seat assigned to the plane\n"
 			"--move-to-seat [filename] [seat]           | Moves to the new seat\n"
+			"--view-account-information                 | Views name, ID, and age of the user\n"
+			"--change-account-name [first] [lastname]   | Changes account username\n"
+			"--change-account-password [old] [new]      | Changes account password\n"
+			"--change-account-age [age]                 | Change account age\n"
 			);
 
 }
@@ -117,6 +118,34 @@ int main(int argc, char* argv[])
 		else if (strcmp(argv[i], "--register") == 0)
 		{
 			inputRegister();
+		}
+		else if (strcmp(argv[i], "--view-account-information") == 0)
+		{
+			viewAccountInformation();
+		}
+		else if (strcmp(argv[i], "--change-account-name") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+
+			const char* firstName = argv[++i];
+			const char* lastName = argv[++i];
+			
+			inputChangeAccountName(firstName, lastName);
+		}
+		else if (strcmp(argv[i], "--change-account-password") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+
+			const char* oldPassword = argv[++i];
+			const char* newPassword = argv[++i];
+
+			inputChangeAccountPassword(oldPassword, newPassword);
+		}
+		else if (strcmp(argv[i], "--change-account-age") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 1)) return 1;
+
+			inputChangeAccountAge(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
 		{
