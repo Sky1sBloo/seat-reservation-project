@@ -188,8 +188,12 @@ AccountError debugMakeAccountAdmin(int accountID)
 		if (iAccount.iD == accountID)
 		{
 			iAccount.isAdmin = true;
+			break;
 		}
 	}
+
+	fclose(accountFile);
+	updateAccount(iAccount.iD, &iAccount);
 
 	return AE_SUCCESS;
 }
