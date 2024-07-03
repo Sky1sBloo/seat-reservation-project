@@ -12,7 +12,6 @@ typedef enum
 {
 	SS_SUCCESS,
 	SS_NO_ACTIVE_SESSION_FOUND,
-	SS_FILE_OPEN_FAILED,
 	SS_FILE_CREATE_FAILED,
 	SS_FILE_REMOVE_FAILED
 } SessionError;
@@ -32,7 +31,7 @@ SessionError saveSession(const void* sessionInfo, size_t size);
  * @param[out] sessionInfo Output session after loading from SESSION_FILE
  *
  * @return
- *   SS_FILE_OPEN_FAILED - Failed to read SESSION_FILE
+ *   SS_NO_ACTIVE_SESSION_FOUND - Failed to read SESSION_FILE
  *   SS_SUCCESS
  */
 SessionError loadSessionInfo(void* sessionInfo, size_t size);

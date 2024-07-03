@@ -21,7 +21,7 @@ SessionError loadSessionInfo(void* sessionInfo, size_t size)
 
 	if (sessionFile == NULL)
 	{
-		return SS_FILE_OPEN_FAILED;
+		return SS_NO_ACTIVE_SESSION_FOUND;
 	}
 
 	fread(sessionInfo, size, 1, sessionFile);
