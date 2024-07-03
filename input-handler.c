@@ -429,7 +429,7 @@ void inputDisableSeat(const char fileName[], const char seatPosition[])
 	}
 
 	Plane currentPlane;
-	inputLoadPlane(&currentPlane, seatPosition);
+	inputLoadPlane(&currentPlane, fileName);
 
 	int column;
 	int row;
@@ -438,23 +438,25 @@ void inputDisableSeat(const char fileName[], const char seatPosition[])
 		printf("Invalid seat input: %s\n", seatPosition);
 		exit(INPUT_ERROR);
 	}
-
-	PlaneErrors plnError = clearSeat(&currentPlane, column, row);
-
+	
+	PlaneErrors plnError = getToSeat(&currentPlane, -2, column, row);
 	switch (plnError)
 	{
 		case PLN_SUCCESS:
+			savePlane(&currentPlane, fileName);
+			printf("Success! Disabled seat on %s\n", seatPosition);
 			break;
 		case PLN_OUT_OF_RANGE:
-			fprintf(stderr, "Seat is out of range\n");
-			exit(INPUT_ERROR);		
-		case PLN_SEAT_NOT_FILLED:
-			fprintf(stderr, "Seat is not filled\n");
+			fprintf(stderr, "Input out of range\n");
+			exit(INPUT_ERROR);
+		case PLN_SEAT_FILLED:
+			fprintf(stderr, "Seat filled \n");
 			exit(INPUT_ERROR);
 		default:
-			fprintf(stderr, "Error: Failed to disable seat\n");
+			fprintf(stderr, "Error: Get to seat failed\n");
 			exit(-1);
 	}
+	
 }
 
 void inputEnableSeat(const char fileName[], const char seatPosition[])
@@ -469,7 +471,7 @@ void inputEnableSeat(const char fileName[], const char seatPosition[])
 	}
 
 	Plane currentPlane;
-	inputLoadPlane(&currentPlane, seatPosition);
+	inputLoadPlane(&currentPlane, fileName);
 
 	int column;
 	int row;
@@ -479,24 +481,25 @@ void inputEnableSeat(const char fileName[], const char seatPosition[])
 		exit(INPUT_ERROR);
 	}
 
-	PlaneErrors plnError = getToSeat(&currentPlane, -2, column, row);
+	PlaneErrors plnError = clearSeat(&currentPlane, column, row);
 
 	switch (plnError)
 	{
 		case PLN_SUCCESS:
 			savePlane(&currentPlane, fileName);
-			printf("Success! Moved seat to %s\n", seatPosition);
+			printf("Success! Enabled seat on %s\n", seatPosition);
 			break;
 		case PLN_OUT_OF_RANGE:
-			fprintf(stderr, "Input out of range\n");
-			exit(INPUT_ERROR);
-		case PLN_SEAT_FILLED:
-			fprintf(stderr, "Seat filled \n");
+			fprintf(stderr, "Seat is out of range\n");
+			exit(INPUT_ERROR);		
+		case PLN_SEAT_NOT_FILLED:
+			fprintf(stderr, "Seat is not filled\n");
 			exit(INPUT_ERROR);
 		default:
-			fprintf(stderr, "Error: Get to seat failed\n");
+			fprintf(stderr, "Error: Failed to disable seat\n");
 			exit(-1);
 	}
+	
 }
 
 bool stringIsInt(const char string[])
@@ -513,17 +516,34 @@ bool stringIsInt(const char string[])
 
 bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* row)
 {
-	if (strlen(formattedInput) != 2)  return false;
+	unsigned long stringLength = strlen(formattedInput);
+	if (stringLength > 3 || stringLength < 2)  return false;
 
+	if (stringLength == 2)
+	{
+		if (!isalpha(formattedInput[1]))  return false;
+	
+		char formattedRow = formattedInput[0];
 
-	if (!isalpha(formattedInput[1]))  return false;
+		if (formattedRow < '0' || formattedRow > '9')  return false;
+		char formattedColumn = toupper(formattedInput[1]);
+	
+		*row = formattedRow - '0' - 1;
+		*column = formattedColumn - 'A';
+	}
+	else if (stringLength == 3)
+	{
+		if (!isalpha(formattedInput[2]))  return false;
 
-	char formattedRow = toupper(formattedInput[0]);
-	char formattedColumn = toupper(formattedInput[1]);
+		char formattedRow[3] = {formattedInput[0], formattedInput[1], '\0'};
+		if (!stringIsInt(formattedRow))  return false;
 
-	*row = formattedRow - '0' - 1;
-	*column = formattedColumn - 'A';
+		char formattedColumn = toupper(formattedInput[2]);
 
+		*row = atoi(formattedRow) - 1;
+		*column = formattedColumn - 'A';
+	}
+	
 	return true;
 }
 
