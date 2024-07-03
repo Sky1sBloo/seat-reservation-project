@@ -7,6 +7,8 @@
 
 // TODO: Fix incomplete argument
 // TODO: Change age to birthday system
+// TODO: Fix account modification system
+// TODO: Fix documentation system on input-handler.h
 void showHelpPrint()
 {
 	printf("--help                         		   | List help commands\n"
@@ -120,6 +122,30 @@ int main(int argc, char* argv[])
 		else if (strcmp(argv[i], "--register") == 0)
 		{
 			inputRegister();
+		}
+		else if (strcmp(argv[i], "--view-account-information") == 0)
+		{
+			
+		}
+		else if (strcmp(argv[i], "--change-account-name") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+
+			const char* firstName = argv[++i];
+			const char* lastName = argv[++i];
+			
+			inputChangeAccountName(firstName, lastName);
+		}
+		else if (strcmp(argv[i], "--change-account-password") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return 1;
+
+			const char* oldPassword = argv[++i];
+			const char* newPassword = argv[++i];
+		}
+		else if (strcmp(argv[i], "--change-account-age") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 1)) return 1;
 		}
 		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
 		{
