@@ -129,13 +129,45 @@ void viewAccountInformation()
 			account.iD, account.firstName, account.lastName, account.age);
 }
 
-void changeAccountName(const char firstName[], const char lastName[])
+bool updateInputAccount(int accountID, const Account* newAccount)
+{
+	AccountError updateError = updateAccount(accountID, newAccount);
+
+	switch (updateError)
+	{
+		case AE_SUCCESS:
+			break;
+		case AE_FILE_OPEN_FAILED:
+			fprintf(stderr, "Error: Failed to open Account file\n");
+			exit(1);
+			break;
+		case AE_FILE_CREATE_FAILED:
+			fprintf(stderr, "Error: Failed to create Account Update File\n");
+			exit(-1);
+			break;
+		case AE_FILE_REMOVE_FAILED:
+			fprintf(stderr, "Error: Failed to remove old account file\n");
+			exit(-1);
+			break;
+		case AE_FILE_RENAME_FAILED:
+			fprintf(stderr, "Error: Failed to rename Account Update File\n");
+			exit(-1);
+			break;
+		default:
+			fprintf(stderr, "Error: Failed to update account\n");
+			exit(-1);
+			break;
+	}
+	return true;
+}
+
+void inputChangeAccountName(const char firstName[], const char lastName[])
 {	
 	Account account;
 	
 	if (loadSessionInfo(&account, sizeof(Account)) == SS_FILE_OPEN_FAILED)
 	{
-		fprintf(stderr, "Failed to find account information\n");
+		fprintf(stderr, "Error to find account information\n");
 		exit(1);
 	}
 
@@ -152,8 +184,13 @@ void changeAccountName(const char firstName[], const char lastName[])
 
 	if (saveSession(&account, sizeof(Account)) == SS_FILE_CREATE_FAILED)
 	{
-		fprintf(stderr, "Failed to create file\n");
+		fprintf(stderr, "Error: Failed to create file\n");
 		exit(-1);
+	}
+
+	if (updateInputAccount(account.iD, &account))
+	{
+		printf("Successfuly updated ID: %d, to %s %s\n", account.iD, firstName, lastName);
 	}
 }
 
