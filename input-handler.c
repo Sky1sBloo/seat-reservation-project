@@ -294,7 +294,7 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 	int row;
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
-		printf("Invalid seat input: %s\n", seatPosition);
+		fprintf(stderr,"Invalid seat input: %s\n", seatPosition);
 		exit(INPUT_ERROR);
 	}
 	
@@ -304,7 +304,7 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 
 	if (currentSeatColumn != -1 || currentSeatRow != -1)
 	{
-		printf("Account has already registered a seat\n");
+		fprintf(stderr, "Account has already registered a seat\n");
 		return;
 	}
 
@@ -318,13 +318,13 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 			break;
 		case PLN_OUT_OF_RANGE:
 			fprintf(stderr, "Input out of range\n");
-			break;
+			exit(INPUT_ERROR);
 		case PLN_SEAT_FILLED:
 			fprintf(stderr, "Seat filled \n");
-			break;
+			exit(INPUT_ERROR);
 		default:
 			fprintf(stderr, "Error: Get to seat failed\n");
-			break;
+			exit(-1);
 	} 
 }
 
@@ -367,13 +367,11 @@ void inputClearAccountSeat(const char fileName[])
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
-			printf("Seat is out of range\n");
+			fprintf(stderr, "Seat is out of range\n");
 			exit(INPUT_ERROR);
-			break;
 		case PLN_SEAT_NOT_FILLED:
-			printf("Seat is not filled\n");
+			fprintf(stderr, "Seat is not filled\n");
 			exit(INPUT_ERROR);
-			break;
 		default:
 			fprintf(stderr, "Error: Clear seat on %d, %d failed\n", currentSeatColumn, currentSeatRow);
 			break;
@@ -426,12 +424,11 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
-			printf("Seat is out of range\n");
+			fprintf(stderr, "Seat is out of range\n");
 			exit(INPUT_ERROR);
-			break;
 		case PLN_SEAT_FILLED:
-			printf("New seat is filled\n");
-			break;
+			fprintf(stderr, "New seat is filled\n");
+			exit(INPUT_ERROR);
 		case PLN_SEAT_NOT_FILLED:
 			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
 			exit(-1);
@@ -439,6 +436,54 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			fprintf(stderr, "Error: Failed to move seat\n");
 			exit(-1);
 			break;
+	}
+}
+
+void inputDisableSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+	{
+		fprintf(stderr, "Error: Failed to load session info\n");
+		exit(FILE_READ_ERROR);
+	}
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	Plane currentPlane;
+	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "error: Failed to load plane\n");
+		exit(FILE_READ_ERROR);
+	}
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		printf("Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+
+	PlaneErrors plnError = clearSeat(&currentPlane, column, row);
+
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			break;
+		case PLN_OUT_OF_RANGE:
+			fprintf(stderr, "Seat is out of range\n");
+			exit(INPUT_ERROR);		
+		case PLN_SEAT_NOT_FILLED:
+			fprintf(stderr, "Seat is not filled\n");
+			exit(INPUT_ERROR);
+		default:
+			fprintf(stderr, "Error: Failed to disable seat\n");
+			exit(-1);
 	}
 }
 

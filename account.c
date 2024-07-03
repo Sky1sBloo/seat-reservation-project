@@ -18,6 +18,7 @@ AccountError createNewAccount(const char* firstName, const char* lastName, const
 	strcpy(newAccount->lastName, lastName);
 	strcpy(newAccount->password, password);
 	newAccount->age = age;
+	newAccount->isAdmin = false;
 
 	fwrite(newAccount, sizeof(Account), 1, accountFile);
 

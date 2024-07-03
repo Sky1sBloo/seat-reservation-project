@@ -3,6 +3,7 @@
  */
 
 #pragma once
+#include <stdbool.h>
 
 #define ACCOUNT_FILE "accounts.dat"
 #define ACCOUNT_UPDATE_FILE "account-temp.dat"  // Name of the new file when updated (gets quickly removed)
@@ -15,7 +16,9 @@ typedef struct Account
 	char firstName[NAME_LENGTH];
 	char lastName[NAME_LENGTH];
 	char password[PASSWORD_LENGTH];
-	unsigned char age; } Account;
+	unsigned char age; 
+	bool isAdmin;
+} Account;
 
 typedef enum
 {

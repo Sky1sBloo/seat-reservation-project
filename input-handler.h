@@ -11,6 +11,7 @@
 #define FILE_READ_ERROR 3
 #define FILE_ERROR 4
 #define INPUT_ERROR 5
+#define NO_ADMIN_PRIVILAGES 6
 
 
 /// Prints filled seat in plane
@@ -51,6 +52,9 @@ void inputClearAccountSeat(const char fileName[]);
 
 /// Moves account seat to new area
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
+
+/// Disables seat (requires admin privilages)
+void inputDisableSeat(const char fileName[], const char seatPosition[]);
 
 /// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
