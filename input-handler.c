@@ -13,7 +13,7 @@ void inputDisplayPlane(const char fileName[])
 	{
 		fprintf(stderr, "Error: Failed to open %s\n", fileName);
 		fprintf(stderr, "  Use --create to create new file\n");
-		exit(1);
+		exit(FILE_WRITE_ERROR);
 	}
 
 	printPlane(&loadedPlane);
@@ -26,7 +26,7 @@ void inputCreatePlane(const char fileName[])
 	if (newPlaneFile == NULL)
 	{
 		fprintf(stderr, "Error: Failed to create file\n");
-		exit(-1);
+		exit(FILE_WRITE_ERROR);
 	}
 	
 	Plane newPlane = initPlane();
@@ -42,7 +42,7 @@ void inputLogin(const char accountID[], const char password[])
  	if (loadSessionInfo(&sessionInfo, sizeof(Account)) != SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There's an existing session, logout first\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
  	}
 
 	// Sanitize input
@@ -53,7 +53,7 @@ void inputLogin(const char accountID[], const char password[])
 	if (!stringIsInt(accountID))
 	{
 		printf("Account ID is not a numerical value\n");
-		exit(0);
+		exit(INPUT_ERROR);
 	}
 	int id = atoi(accountID);
 
@@ -67,10 +67,10 @@ void inputLogin(const char accountID[], const char password[])
  			break;
  		case AE_WRONG_USER_OR_PASSWORD:
  			printf("Wrong user or password\n");
-			exit(0);
+			exit(INPUT_ERROR);
  		case AE_FILE_OPEN_FAILED:
  			fprintf(stderr, "Account file failed to open\n");
-			exit(1);
+			exit(FILE_READ_ERROR);
  		default:
  			fprintf(stderr, "Error: Login error returns wrong\n");
  	}
@@ -85,7 +85,7 @@ void inputLogout()
 	if (removeSession() == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "No active session found\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 	printf("Logout success\n");
 }
@@ -107,7 +107,7 @@ void inputRegister()
 	if (createNewAccount(newAccount.firstName, newAccount.lastName, newAccount.password, newAccount.age, &newAccount) == AE_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "Error: Failed to open account\n");
-		exit(-1);
+		exit(FILE_WRITE_ERROR);
 	}
 
 	printf("The account ID is %d\n", newAccount.iD);
@@ -120,7 +120,7 @@ void viewAccountInformation()
 	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Failed to find account information\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	printf("ID: %d\n"
@@ -139,19 +139,19 @@ bool updateInputAccount(int accountID, const Account* newAccount)
 			break;
 		case AE_FILE_OPEN_FAILED:
 			fprintf(stderr, "Error: Failed to open Account file\n");
-			exit(1);
+			exit(FILE_READ_ERROR);
 			break;
 		case AE_FILE_CREATE_FAILED:
 			fprintf(stderr, "Error: Failed to create Account Update File\n");
-			exit(-1);
+			exit(FILE_WRITE_ERROR);
 			break;
 		case AE_FILE_REMOVE_FAILED:
 			fprintf(stderr, "Error: Failed to remove old account file\n");
-			exit(-1);
+			exit(FILE_ERROR);
 			break;
 		case AE_FILE_RENAME_FAILED:
 			fprintf(stderr, "Error: Failed to rename Account Update File\n");
-			exit(-1);
+			exit(FILE_ERROR);
 			break;
 		default:
 			fprintf(stderr, "Error: Failed to update account\n");
@@ -168,24 +168,24 @@ void inputChangeAccountName(const char firstName[], const char lastName[])
 	if (loadSessionInfo(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error to find account information\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	if (changeAccountFirstName(&account, firstName) == AE_INPUT_TOO_LONG)
 	{
 		printf("First name too long\n");
-		exit(1);
+		exit(INPUT_ERROR);
 	}
 	if (changeAccountLastName(&account, lastName) == AE_INPUT_TOO_LONG)
 	{
 		printf("Last name too long\n");
-		exit(1);
+		exit(INPUT_ERROR);
 	}
 
 	if (saveSession(&account, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error: Failed to update session file\n");
-		exit(-1);
+		exit(FILE_READ_ERROR);
 	}
 
 	if (updateInputAccount(account.iD, &account))
@@ -201,7 +201,7 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
  	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There is no session found. Login first.\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
  	}
 
  	AccountError loginError;
@@ -214,9 +214,10 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
  			break;
  		case AE_WRONG_USER_OR_PASSWORD:
  			printf("Wrong user or password\n");
+			exit(INPUT_ERROR);
  		case AE_FILE_OPEN_FAILED:
  			fprintf(stderr, "Account file failed to open\n");
-			exit(1);
+			exit(FILE_READ_ERROR);
  		default:
  			fprintf(stderr, "Error: Login error returns wrong\n");
 			exit(-1);
@@ -226,7 +227,7 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
 	if (changeAccountPassword(&sessionInfo, newPassword) == AE_INPUT_TOO_LONG)
 	{
 		fprintf(stderr, "Input too long\n");
-		exit(1);
+		exit(INPUT_ERROR);
 	}
 
 
@@ -242,7 +243,7 @@ void inputChangeAccountAge(const char newAge[])
 	if (!stringIsInt(newAge) || strlen(newAge) > 3)
 	{
 		fprintf(stderr, "Error: Input is not a number or too long\n");
-		exit(1);
+		exit(INPUT_ERROR);
 	}
 
 	int age = atoi(newAge);
@@ -250,14 +251,14 @@ void inputChangeAccountAge(const char newAge[])
 	if (age > 255)
 	{
 		fprintf(stderr, "Error: Input is not a number or too long\n");
-		exit(1);
+		exit(INPUT_ERROR);
 	}
 	
 	Account sessionInfo;	
  	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There is no session found. Login first.\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
  	}
 
 
@@ -265,7 +266,7 @@ void inputChangeAccountAge(const char newAge[])
 	if (saveSession(&sessionInfo, sizeof(Account)) == SS_FILE_CREATE_FAILED)
 	{
 		fprintf(stderr, "Error: Failed to update session\n");
-		exit(-1);
+		exit(FILE_WRITE_ERROR);
 	}
 
 	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
@@ -280,21 +281,21 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	Plane currentPlane;
 	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "Error: Failed to load plane\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 	int column;
 	int row;
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
 		printf("Invalid seat input: %s\n", seatPosition);
-		exit(0);
+		exit(INPUT_ERROR);
 	}
 	
 	int currentSeatColumn;
@@ -334,7 +335,7 @@ void inputClearAccountSeat(const char fileName[])
 	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "error: Failed to load plane\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	Account accountInfo;
@@ -346,7 +347,7 @@ void inputClearAccountSeat(const char fileName[])
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
@@ -367,9 +368,11 @@ void inputClearAccountSeat(const char fileName[])
 			break;
 		case PLN_OUT_OF_RANGE:
 			printf("Seat is out of range\n");
+			exit(INPUT_ERROR);
 			break;
 		case PLN_SEAT_NOT_FILLED:
 			printf("Seat is not filled\n");
+			exit(INPUT_ERROR);
 			break;
 		default:
 			fprintf(stderr, "Error: Clear seat on %d, %d failed\n", currentSeatColumn, currentSeatRow);
@@ -383,7 +386,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
 	{
 		fprintf(stderr, "error: Failed to load plane\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	int column;
@@ -391,7 +394,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
 		printf("Invalid seat input: %s\n", seatPosition);
-		exit(0);
+		exit(INPUT_ERROR);
 	}
 
 	Account accountInfo;
@@ -403,7 +406,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(1);
+		exit(FILE_READ_ERROR);
 	}
 
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
@@ -424,16 +427,17 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			break;
 		case PLN_OUT_OF_RANGE:
 			printf("Seat is out of range\n");
+			exit(INPUT_ERROR);
 			break;
 		case PLN_SEAT_FILLED:
 			printf("New seat is filled\n");
 			break;
 		case PLN_SEAT_NOT_FILLED:
 			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
-			exit(1);
+			exit(-1);
 		default:
 			fprintf(stderr, "Error: Failed to move seat\n");
-			exit(1);
+			exit(-1);
 			break;
 	}
 }
