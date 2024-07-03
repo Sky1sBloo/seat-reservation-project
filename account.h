@@ -14,8 +14,7 @@ typedef struct Account
 	char firstName[NAME_LENGTH];
 	char lastName[NAME_LENGTH];
 	char password[PASSWORD_LENGTH];
-	unsigned char age;
-} Account;
+	unsigned char age; } Account;
 
 typedef enum
 {
@@ -55,16 +54,48 @@ int getNewAccountID();
  */
 AccountError loginAccount(int accountID, const char* password, Account* account);
 
-/// Changes account first name
+/**
+ * Changes account first name
+ *
+ * @param[out] account Output of changed first name
+ *
+ * @return
+ *  AE_INPUT_TOO_LONG - parameter newFirstName exceeds NAME_LENGTH
+ *  AE_SUCCESS
+ */
 AccountError changeAccountFirstName(Account* account, const char* newFirstName);
 
-/// Changes account last name
+/**
+ * Changes account last name
+ *
+ * @param[out] account Output of changed last name
+ *
+ * @return
+ *  AE_INPUT_TOO_LONG - parameter newLastName exceeds NAME_LENGTH
+ *  AE_SUCCESS
+ */
 AccountError changeAccountLastName(Account* account, const char* newLastName);
 
-/// Changes account password
+/**
+ * Changes account password
+ *
+ * @param[out] account Output of changed password
+ *
+ * @return
+ *  AE_INPUT_TOO_LONG - parameter newPassword exceeds PASSWORD_LENGTH
+ *  AE_SUCCESS
+ */
 AccountError changeAccountPassword(Account* account, const char* newPassword);
 
-/// Changes account age
+/**
+ * Changes account age
+ *
+ *
+ * @param[out] account Output of changed age
+ *
+ * @return
+ *  AE_SUCCESS
+ */
 AccountError changeAccountAge(Account* account, unsigned char newAge);
 
 /// Views all possible accounts and their information
