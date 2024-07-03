@@ -231,8 +231,37 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
 
 	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
 	{
-		printf("Successfully updated password of %d\n", sessionInfo.iD);
+		printf("Successfully updated password of User %d\n", sessionInfo.iD);
 	}
+}
+
+void inputChangeAccountAge(const char newAge[])
+{
+	if (!stringIsInt(newAge) || strlen(newAge) > 3)
+	{
+		fprintf(stderr, "Error: Input is not a number or too long\n");
+		exit(1);
+	}
+
+	int age = atoi(newAge);
+
+	if (age > 255)
+	{
+		fprintf(stderr, "Error: Input is not a number or too long\n");
+		exit(1);
+	}
+	
+	Account sessionInfo;	
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+ 	{
+ 		fprintf(stderr, "There is no session found. Login first.\n");
+		exit(1);
+ 	}
+
+
+	changeAccountAge(&sessionInfo, (unsigned char) age);
+
+	printf("Successfuly updated age of User %d\n", sessionInfo.iD);
 }
 
 void inputGoToSeat(const char fileName[], const char seatPosition[])

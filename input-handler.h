@@ -34,6 +34,9 @@ void inputChangeAccountName(const char firstName[], const char lastName[]);
 /// Changes account password with verification
 void inputChangeAccountPassword(const char oldPassword[], const char newPassword[]);
 
+/// Changes account age
+void inputChangeAccountAge(const char newAge[]);
+
 /// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 

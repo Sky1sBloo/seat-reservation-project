@@ -148,6 +148,8 @@ int main(int argc, char* argv[])
 		else if (strcmp(argv[i], "--change-account-age") == 0)
 		{
 			if (!argumentIsSupplied(argc, i, 1)) return 1;
+
+			inputChangeAccountAge(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
 		{
