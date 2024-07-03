@@ -44,6 +44,26 @@ Clears current seat of the user of specific plane.
 ```
 Moves the current registered seat of the user of specific plane.
 
+```
+--view-account-information
+```
+Shows details of user information
+
+```
+--change-acount-name [first] [lastname]
+```
+Changes user name
+
+```
+--change-account-password [old] [new]
+```
+Changes user password
+
+```
+--change-account-age [age]
+```
+Changes user age
+
 ## Build
 ### Using CMake
 1. Generate CMake files
