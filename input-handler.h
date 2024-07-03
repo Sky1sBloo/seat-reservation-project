@@ -31,6 +31,9 @@ bool updateInputAccount(int accountID, const Account* newAccount);
 /// Changes accoount name
 void inputChangeAccountName(const char firstName[], const char lastName[]);
 
+/// Changes account password with verification
+void inputChangeAccountPassword(const char oldPassword[], const char newPassword[]);
+
 /// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
