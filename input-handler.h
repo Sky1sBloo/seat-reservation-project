@@ -88,3 +88,16 @@ void inputConvertSeatToFormatted(int column, int row, char formattedInput[2]);
  */
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row);
 
+/**
+ * Loads session with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadSessionInfo(Account* sessionInfo);
+
+/**
+ * Loads plane with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadPlane(Plane* plane, const char fileName[]);

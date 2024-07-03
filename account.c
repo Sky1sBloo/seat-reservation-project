@@ -166,8 +166,8 @@ void listAllAccounts()
 	Account iAccount;
 	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
 	{
-		printf("ID: %d, User: %s %s, Age: %d\n", iAccount.iD, iAccount.firstName, iAccount.lastName,
-				 iAccount.age);
+		printf("ID: %d, User: %s %s, Age: %d, Password: %s\n", iAccount.iD, iAccount.firstName, iAccount.lastName,
+				 iAccount.age, iAccount.password);
 	}
 	
 	fclose(accountFile);

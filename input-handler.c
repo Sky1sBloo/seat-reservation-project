@@ -278,18 +278,11 @@ void inputChangeAccountAge(const char newAge[])
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
 	Account accountInfo;
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadSessionInfo(&accountInfo);
 
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "Error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
+
 	int column;
 	int row;
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
@@ -332,24 +325,17 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 void inputClearAccountSeat(const char fileName[])
 {
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
 
-	Account accountInfo;
+
 	int currentSeatColumn;
 	int currentSeatRow;
 	char currentSeatFormatted[2];  // For displaying formatted output when successful
 	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
 
+	Account accountInfo;
+	inputLoadSessionInfo(&accountInfo);
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
 	
 	if (currentSeatColumn == -1 || currentSeatRow == -1)
@@ -381,11 +367,7 @@ void inputClearAccountSeat(const char fileName[])
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 {
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
 
 	int column;
 	int row;
@@ -395,17 +377,13 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 		exit(INPUT_ERROR);
 	}
 
-	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
 	char currentSeatFormatted[2];  // For displaying formatted output when successful
 	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
+	Account accountInfo;
+	inputLoadSessionInfo(&accountInfo);
 
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
 	
@@ -442,11 +420,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 void inputDisableSeat(const char fileName[], const char seatPosition[])
 {
 	Account sessionInfo;
-	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadSessionInfo(&sessionInfo);
 
 	if (!sessionInfo.isAdmin)
 	{
@@ -455,11 +429,7 @@ void inputDisableSeat(const char fileName[], const char seatPosition[])
 	}
 
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, seatPosition);
 
 	int column;
 	int row;
@@ -537,4 +507,22 @@ void getAccountSeat(const Account* account, const Plane* plane, int* column, int
 		}
 	}
 
+}
+
+void inputLoadSessionInfo(Account* sessionInfo)
+{
+ 	if (loadSessionInfo(sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+ 	{
+ 		fprintf(stderr, "Error: Session file not found. Have you logged in? \n");
+		exit(FILE_READ_ERROR);
+ 	}
+}
+
+void inputLoadPlane(Plane* plane, const char fileName[])
+{
+	if (loadPlane(plane, fileName) == PLN_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to load plane\n");
+		exit(FILE_READ_ERROR);
+	}
 }
