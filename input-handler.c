@@ -115,7 +115,7 @@ void inputRegister()
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
 	Account accountInfo;
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_FILE_OPEN_FAILED)
+	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
 	{
 		fprintf(stderr, "Error: Failed to load session info\n");
 		exit(1);
