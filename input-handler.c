@@ -331,17 +331,17 @@ void inputClearAccountSeat(const char fileName[])
 	int currentSeatColumn;
 	int currentSeatRow;
 	char currentSeatFormatted[2];  // For displaying formatted output when successful
-	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
 
 	Account accountInfo;
 	inputLoadSessionInfo(&accountInfo);
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
+	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 	
 	if (currentSeatColumn == -1 || currentSeatRow == -1)
 	{
-		printf("Account has no seat registered in this place\n");
-		return;
+		fprintf(stderr, "Account has no seat registered in this place\n");
+		exit(INPUT_ERROR);
 	}
 
 	PlaneErrors plnError = clearSeat(&currentPlane, currentSeatColumn, currentSeatRow);
