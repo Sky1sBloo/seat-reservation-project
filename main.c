@@ -19,7 +19,8 @@ void showHelpPrint()
 			"--view-account-information                 | Views name, ID, and age of the user\n"
 			"--change-account-name [first] [lastname]   | Changes account username\n"
 			"--change-account-password [old] [new]      | Changes account password\n"
-			"--change-account-age [age]                 | Change account age\n"
+			"--change-account-age [age]                 | Change account age\n\n\n\n"
+			"--debug-show-accounts                      | Lists all accounts\n"
 			);
 
 }
