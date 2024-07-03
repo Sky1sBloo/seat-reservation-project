@@ -39,7 +39,7 @@ void inputLogin(const char accountID[], const char password[])
 {
 	// Check if login
  	Account sessionInfo;
- 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+ 	if (loadSessionInfo(&sessionInfo, sizeof(Account)) != SS_NO_ACTIVE_SESSION_FOUND)
  	{
  		fprintf(stderr, "There's an existing session, logout first\n");
 		exit(1);

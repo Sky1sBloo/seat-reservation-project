@@ -54,6 +54,7 @@ AccountError createNewAccount(const char* firstName, const char* lastName, const
  *  AE_SUCCESS
  */
 AccountError updateAccount(int accountID, const Account* newAccount);
+
 /**
  * Creates a new account ID based on ACCOUNT_FILE
  *
