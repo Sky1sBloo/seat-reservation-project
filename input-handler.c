@@ -184,7 +184,7 @@ void inputChangeAccountName(const char firstName[], const char lastName[])
 
 	if (saveSession(&account, sizeof(Account)) == SS_FILE_CREATE_FAILED)
 	{
-		fprintf(stderr, "Error: Failed to create file\n");
+		fprintf(stderr, "Error: Failed to update session file\n");
 		exit(-1);
 	}
 
@@ -229,6 +229,8 @@ void inputChangeAccountPassword(const char oldPassword[], const char newPassword
 		exit(1);
 	}
 
+
+
 	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
 	{
 		printf("Successfully updated password of User %d\n", sessionInfo.iD);
@@ -260,8 +262,16 @@ void inputChangeAccountAge(const char newAge[])
 
 
 	changeAccountAge(&sessionInfo, (unsigned char) age);
+	if (saveSession(&sessionInfo, sizeof(Account)) == SS_FILE_CREATE_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to update session\n");
+		exit(-1);
+	}
 
-	printf("Successfuly updated age of User %d\n", sessionInfo.iD);
+	if (updateInputAccount(sessionInfo.iD, &sessionInfo))
+	{
+		printf("Successfuly updated age of User %d\n", sessionInfo.iD);
+	}
 }
 
 void inputGoToSeat(const char fileName[], const char seatPosition[])
