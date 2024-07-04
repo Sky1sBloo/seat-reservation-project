@@ -28,6 +28,10 @@ void inputDisplayPlane(const char fileName[])
 		printPlane(&loadedPlane, accountSession.iD);
 	}
 
+	if (isPlaneFull(&loadedPlane))
+	{
+		printf("Plane is full!\n");
+	}
 }
 
 void inputCreatePlane(const char fileName[])
