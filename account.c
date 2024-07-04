@@ -173,6 +173,24 @@ void listAllAccounts()
 	fclose(accountFile);
 }
 
+AccountError findAccount(Account* account, int accountiD)
+{
+	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");
+	Account iAccount;
+
+	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
+	{
+		if (iAccount.iD == accountiD)
+		{
+			fclose(accountFile);
+			return AE_SUCCESS;
+		}
+	}
+
+	fclose(accountFile);
+	return AE_CANNOT_FIND_ACCOUNT;
+}
+
 AccountError debugMakeAccountAdmin(int accountID)
 {
 	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");

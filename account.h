@@ -24,6 +24,7 @@ typedef enum
 {
 	AE_SUCCESS,
 	AE_WRONG_USER_OR_PASSWORD,
+	AE_CANNOT_FIND_ACCOUNT,
 	AE_FILE_OPEN_FAILED,
 	AE_FILE_CREATE_FAILED,
 	AE_FILE_REMOVE_FAILED,
@@ -122,6 +123,9 @@ AccountError changeAccountAge(Account* account, unsigned char newAge);
 
 /// Views all possible accounts and their information
 void listAllAccounts();
+
+/// Finds the corresponding acconut from accountiD
+AccountError findAccount(Account* account, int accountiD);
 
 /** 
  * Makes the account have admin privilages
