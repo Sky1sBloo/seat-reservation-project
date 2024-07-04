@@ -454,24 +454,16 @@ void inputDisableSeat(const char fileName[], const char seatPosition[])
 		exit(INPUT_ERROR);
 	}
 	
-	PlaneErrors plnError = getToSeat(&currentPlane, -2, column, row);
-	switch (plnError)
+	if (column < 0 || row < 0 || column > PLANE_COLUMN || row > PLANE_ROW)
 	{
-		case PLN_SUCCESS:
-			savePlane(&currentPlane, fileName);
-			printf("Success! Disabled seat on %s\n", seatPosition);
-			break;
-		case PLN_OUT_OF_RANGE:
-			fprintf(stderr, "Input out of range\n");
-			exit(INPUT_ERROR);
-		case PLN_SEAT_FILLED:
-			fprintf(stderr, "Seat filled \n");
-			exit(INPUT_ERROR);
-		default:
-			fprintf(stderr, "Error: Get to seat failed\n");
-			exit(-1);
+		fprintf(stderr, "Input out of range\n");
+		exit(INPUT_ERROR);
 	}
-	
+
+	currentPlane.seats[column][row] = -2;
+
+	savePlane(&currentPlane, fileName);
+	printf("Success! Disabled seat on %s\n", seatPosition);
 }
 
 void inputEnableSeat(const char fileName[], const char seatPosition[])
