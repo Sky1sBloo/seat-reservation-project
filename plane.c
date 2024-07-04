@@ -19,8 +19,6 @@ Plane initPlane()
 
 void printPlane(const Plane* plane, int targetValue)
 {
-	char planeSeatedSymbol = 'x';
-
 	for (int row = 0; row < PLANE_ROW; row++)
 	{
 		if (row < 9)
