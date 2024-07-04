@@ -124,7 +124,16 @@ AccountError changeAccountAge(Account* account, unsigned char newAge);
 /// Views all possible accounts and their information
 void listAllAccounts();
 
-/// Finds the corresponding acconut from accountiD
+/**
+ * Finds the corresponding acconut from accountiD
+ *
+ * @param[out] account Output of the searched account
+ * @param[in] accountiD of the account to be searched
+ *
+ * @return
+ *  AE_CANNOT_FIND_ACCOUNT - Cannot find specific account based on ID
+ *  AE_SUCCESS
+ */
 AccountError findAccount(Account* account, int accountiD);
 
 /** 
