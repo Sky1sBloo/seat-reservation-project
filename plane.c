@@ -121,6 +121,15 @@ PlaneErrors moveSeat(Plane* plane, int prevColumn, int prevRow, int newColumn, i
 	return PLN_SUCCESS;
 }
 
+PlaneErrors getValueOfSeat(int* value, const Plane* plane, int column, int row)
+{
+	if (column < 0 || column >= PLANE_COLUMN) return PLN_OUT_OF_RANGE;
+	if (row < 0 || row >= PLANE_ROW) return PLN_OUT_OF_RANGE;
+
+	*value = plane->seats[column][row];
+	return PLN_SUCCESS;
+}
+
 /**
  * Converts input such as 1B or 3c to column and row integers and returns it on column and row pointers
  */
