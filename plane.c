@@ -100,7 +100,7 @@ PlaneErrors clearSeat(Plane* plane, int column, int row)
 	if (column < 0 || column >= PLANE_COLUMN) return PLN_OUT_OF_RANGE;
 	if (row < 0 || row >= PLANE_ROW) return PLN_OUT_OF_RANGE;
 
-	if (!plane->seats[column][row]) return PLN_SEAT_NOT_FILLED;
+	if (plane->seats[column][row] == -1) return PLN_SEAT_NOT_FILLED;
 	plane->seats[column][row] = -1;
 	return PLN_SUCCESS;
 }
