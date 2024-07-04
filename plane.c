@@ -34,11 +34,11 @@ void printPlane(const Plane* plane, int targetValue)
 			int planeValue = plane->seats[column][row];
 			if (planeValue >= 0 && planeValue == targetValue)
 			{
-				printf("+    ");
+				printf("x    ");
 			}
 			else if (plane->seats[column][row] != -1)
 			{
-				printf("x    ");
+				printf("-    ");
 			}
 			else
 			{
