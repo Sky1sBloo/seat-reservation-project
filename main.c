@@ -32,7 +32,6 @@ void showHelpPrint()
 void showMissingArgumentsMessage()
 {
 	fprintf(stderr, "Missing arguments, use --help for correct usage\n");
-	exit(INPUT_ERROR);
 }
 
 /// Checks if argument matches with either target arguments
@@ -194,7 +193,8 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			showHelpPrint();
+			fprintf(stderr, "Invalid command, type --help or -h for help\n");
+			exit(INPUT_ERROR);
 		}
 	}
 }
