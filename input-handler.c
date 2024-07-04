@@ -345,7 +345,7 @@ void inputClearAccountSeat(const char fileName[])
 
 	int currentSeatColumn;
 	int currentSeatRow;
-	char currentSeatFormatted[2];  // For displaying formatted output when successful
+	char currentSeatFormatted[3];  // For displaying formatted output when successful
 
 
 	Account accountInfo;
@@ -394,7 +394,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 
 	int currentSeatColumn;
 	int currentSeatRow;
-	char currentSeatFormatted[2];  // For displaying formatted output when successful
+	char currentSeatFormatted[3];  // For displaying formatted output when successful
 	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
 	Account accountInfo;
@@ -600,10 +600,19 @@ bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* ro
 	return true;
 }
 
-void inputConvertSeatToFormatted(int column, int row, char formattedInput[2])
+void inputConvertSeatToFormatted(int column, int row, char formattedInput[3])
 {
-	formattedInput[0] = row + 1 + '0';
-	formattedInput[1] = column + 'A';
+	if (row + 1 < 10)
+	{
+		formattedInput[0] = row + 1 + '0';
+		formattedInput[1] = column + 'A';
+	}
+	else
+	{
+		formattedInput[0] = '1';
+		formattedInput[1] = 10 - row - 1 + '0';
+		formattedInput[2] = column + 'A';
+	}
 }
 
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row)
