@@ -99,6 +99,8 @@ PlaneErrors moveSeat(Plane* plane, int prevColumn, int prevRow, int newColumn, i
  *
  * @param[out] value Output of the seat
  * @return 
+ *  PLN_OUT_OF_RANGE
+ *  PLN_SUCCESS
  */
 PlaneErrors getValueOfSeat(int* value, const Plane* plane, int column, int row);
 
