@@ -17,7 +17,7 @@ Plane initPlane()
 	return newPlane;
 }
 
-void printPlane(const Plane* plane)
+void printPlane(const Plane* plane, int targetValue)
 {
 	char planeSeatedSymbol = 'x';
 
@@ -33,7 +33,12 @@ void printPlane(const Plane* plane)
 		}
 		for (int column = 0; column < PLANE_COLUMN; column++)
 		{
-			if (plane->seats[column][row] != -1)
+			int planeValue = plane->seats[column][row];
+			if (planeValue >= 0 && planeValue == targetValue)
+			{
+				printf("+    ");
+			}
+			else if (plane->seats[column][row] != -1)
 			{
 				printf("x    ");
 			}

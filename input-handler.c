@@ -16,7 +16,18 @@ void inputDisplayPlane(const char fileName[])
 		exit(FILE_WRITE_ERROR);
 	}
 
-	printPlane(&loadedPlane);
+	Account accountSession;
+	SessionError sessionError = loadSessionInfo(&accountSession, sizeof(Account));
+
+	if (sessionError == SS_NO_ACTIVE_SESSION_FOUND)
+	{
+		printPlane(&loadedPlane, -1);
+	}
+	else
+	{
+		printPlane(&loadedPlane, accountSession.iD);
+	}
+
 }
 
 void inputCreatePlane(const char fileName[])
