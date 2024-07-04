@@ -182,6 +182,7 @@ AccountError findAccount(Account* account, int accountiD)
 	{
 		if (iAccount.iD == accountiD)
 		{
+			*account = iAccount;
 			fclose(accountFile);
 			return AE_SUCCESS;
 		}
