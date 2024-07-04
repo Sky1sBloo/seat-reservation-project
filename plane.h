@@ -34,8 +34,8 @@ Plane initPlane();
  * Prints the contents of the plane
  * 
  * Symbols:
- * + - Target
- * x - Filled
+ * x - Target
+ * - - Filled
  * 9B - not filled
  *
  * @param targetValue Make negative value if you aren't targeting anything
