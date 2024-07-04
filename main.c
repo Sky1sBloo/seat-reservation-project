@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "account.h"
 #include "input-handler.h"
 
 void showHelpPrint()
@@ -25,7 +24,7 @@ void showHelpPrint()
 			"--enable-seat [filename] [seat]            | enables seats to be active \n"
 			"--disable-seat [filename] [seat]           | disables seats\n"
 			"--view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
-			"--debug-make-admin [userID]                | Makes userID admin\n"
+			"--debug-make-admin                         | Makes userID admin\n"
 			);
 
 }
