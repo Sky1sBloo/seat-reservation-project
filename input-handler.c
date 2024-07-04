@@ -261,10 +261,10 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
-			printf("Seat is out of range\n");
+			fprintf(stderr, "Seat is out of range\n");
 			break;
 		case PLN_SEAT_FILLED:
-			printf("New seat is filled\n");
+			fprintf(stderr, "Error: Target seat is currently filled\n");
 			break;
 		case PLN_SEAT_NOT_FILLED:
 			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
