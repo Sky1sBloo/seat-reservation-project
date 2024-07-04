@@ -74,13 +74,13 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--display") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputDisplayPlane(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--go-to-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seatPosition = argv[++i];
 			
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--move-to-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seatPosition = argv[++i];
 
@@ -97,19 +97,19 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--clear-current-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputClearAccountSeat(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--create") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputCreatePlane(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--login") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 
 			const char* accountID = argv[++i];
 			const char* password = argv[++i];
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-name") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
 			const char* firstName = argv[++i];
 			const char* lastName = argv[++i];
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-password") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
 			const char* oldPassword = argv[++i];
 			const char* newPassword = argv[++i];
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-age") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1)) return 1;
+			if (!argumentIsSupplied(argc, i, 1)) return INPUT_ERROR;
 
 			inputChangeAccountAge(argv[++i]);
 		}
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--enable-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seat = argv[++i];
 
@@ -166,11 +166,20 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--disable-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seat = argv[++i];
 
 			inputDisableSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--view-account-in-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
+
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputViewAccountInSeat(fileName, seat);
 		}
 		else if (strcmp(argv[i], "--debug-make-admin") == 0)
 		{

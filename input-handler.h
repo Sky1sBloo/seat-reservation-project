@@ -58,6 +58,10 @@ void inputDisableSeat(const char fileName[], const char seatPosition[]);
 
 /// Enables seat
 void inputEnableSeat(const char fileName[], const char seatPosition[]);
+
+/// Prints account in specific seat
+void inputViewAccountInSeat(const char fileName[], const char seatPosition[]);
+
 /// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
 

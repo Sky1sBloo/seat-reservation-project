@@ -477,7 +477,7 @@ void inputEnableSeat(const char fileName[], const char seatPosition[])
 	int row;
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
-		printf("Invalid seat input: %s\n", seatPosition);
+		fprintf(stderr, "Invalid seat input: %s\n", seatPosition);
 		exit(INPUT_ERROR);
 	}
 
@@ -500,6 +500,46 @@ void inputEnableSeat(const char fileName[], const char seatPosition[])
 			exit(-1);
 	}
 	
+}
+
+void inputViewAccountInSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	
+	Plane currentPlane;
+	inputLoadPlane(&currentPlane, fileName);
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		fprintf(stderr,"Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+
+	int seatAccountID;
+	if (getValueOfSeat(&seatAccountID, &currentPlane, column, row) == PLN_OUT_OF_RANGE)
+	{
+		fprintf(stderr, "Seat input out of range\n");
+		exit(INPUT_ERROR);
+	}
+	
+	Account account;	
+	if (findAccount(&account, seatAccountID) == AE_CANNOT_FIND_ACCOUNT)
+	{
+		fprintf(stderr, "Cannot find account\n");
+		exit(FILE_READ_ERROR);
+	}
+
+	printf("User: %d \nName: %s %s \nAge: %d\n", account.iD, account.firstName, account.lastName, account.age);
 }
 
 bool stringIsInt(const char string[])
