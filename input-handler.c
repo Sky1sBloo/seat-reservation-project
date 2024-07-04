@@ -278,23 +278,16 @@ void inputChangeAccountAge(const char newAge[])
 void inputGoToSeat(const char fileName[], const char seatPosition[])
 {
 	Account accountInfo;
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadSessionInfo(&accountInfo);
 
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "Error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
+
 	int column;
 	int row;
 	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
 	{
-		printf("Invalid seat input: %s\n", seatPosition);
+		fprintf(stderr,"Invalid seat input: %s\n", seatPosition);
 		exit(INPUT_ERROR);
 	}
 	
@@ -304,7 +297,7 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 
 	if (currentSeatColumn != -1 || currentSeatRow != -1)
 	{
-		printf("Account has already registered a seat\n");
+		fprintf(stderr, "Account has already registered a seat\n");
 		return;
 	}
 
@@ -318,13 +311,13 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 			break;
 		case PLN_OUT_OF_RANGE:
 			fprintf(stderr, "Input out of range\n");
-			break;
+			exit(INPUT_ERROR);
 		case PLN_SEAT_FILLED:
 			fprintf(stderr, "Seat filled \n");
-			break;
+			exit(INPUT_ERROR);
 		default:
 			fprintf(stderr, "Error: Get to seat failed\n");
-			break;
+			exit(-1);
 	} 
 }
 
@@ -332,30 +325,23 @@ void inputGoToSeat(const char fileName[], const char seatPosition[])
 void inputClearAccountSeat(const char fileName[])
 {
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
 
-	Account accountInfo;
+
 	int currentSeatColumn;
 	int currentSeatRow;
 	char currentSeatFormatted[2];  // For displaying formatted output when successful
-	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
 
+	Account accountInfo;
+	inputLoadSessionInfo(&accountInfo);
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
+	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 	
 	if (currentSeatColumn == -1 || currentSeatRow == -1)
 	{
-		printf("Account has no seat registered in this place\n");
-		return;
+		fprintf(stderr, "Account has no seat registered in this place\n");
+		exit(INPUT_ERROR);
 	}
 
 	PlaneErrors plnError = clearSeat(&currentPlane, currentSeatColumn, currentSeatRow);
@@ -367,13 +353,11 @@ void inputClearAccountSeat(const char fileName[])
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
-			printf("Seat is out of range\n");
+			fprintf(stderr, "Seat is out of range\n");
 			exit(INPUT_ERROR);
-			break;
 		case PLN_SEAT_NOT_FILLED:
-			printf("Seat is not filled\n");
+			fprintf(stderr, "Seat is not filled\n");
 			exit(INPUT_ERROR);
-			break;
 		default:
 			fprintf(stderr, "Error: Clear seat on %d, %d failed\n", currentSeatColumn, currentSeatRow);
 			break;
@@ -383,11 +367,7 @@ void inputClearAccountSeat(const char fileName[])
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 {
 	Plane currentPlane;
-	if (loadPlane(&currentPlane, fileName) == PLN_FILE_OPEN_FAILED)
-	{
-		fprintf(stderr, "error: Failed to load plane\n");
-		exit(FILE_READ_ERROR);
-	}
+	inputLoadPlane(&currentPlane, fileName);
 
 	int column;
 	int row;
@@ -397,17 +377,13 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 		exit(INPUT_ERROR);
 	}
 
-	Account accountInfo;
 	int currentSeatColumn;
 	int currentSeatRow;
 	char currentSeatFormatted[2];  // For displaying formatted output when successful
 	inputConvertSeatToFormatted(currentSeatColumn, currentSeatRow, currentSeatFormatted);
 
-	if (loadSessionInfo(&accountInfo, sizeof(Account)) != SS_SUCCESS)
-	{
-		fprintf(stderr, "Error: Failed to load session info\n");
-		exit(FILE_READ_ERROR);
-	}
+	Account accountInfo;
+	inputLoadSessionInfo(&accountInfo);
 
 	getAccountSeat(&accountInfo, &currentPlane, &currentSeatColumn, &currentSeatRow);
 	
@@ -426,12 +402,11 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			savePlane(&currentPlane, fileName);
 			break;
 		case PLN_OUT_OF_RANGE:
-			printf("Seat is out of range\n");
+			fprintf(stderr, "Seat is out of range\n");
 			exit(INPUT_ERROR);
-			break;
 		case PLN_SEAT_FILLED:
-			printf("New seat is filled\n");
-			break;
+			fprintf(stderr, "New seat is filled\n");
+			exit(INPUT_ERROR);
 		case PLN_SEAT_NOT_FILLED:
 			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
 			exit(-1);
@@ -440,6 +415,137 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			exit(-1);
 			break;
 	}
+}
+
+void inputDisableSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	Plane currentPlane;
+	inputLoadPlane(&currentPlane, fileName);
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		printf("Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+	
+	PlaneErrors plnError = getToSeat(&currentPlane, -2, column, row);
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			savePlane(&currentPlane, fileName);
+			printf("Success! Disabled seat on %s\n", seatPosition);
+			break;
+		case PLN_OUT_OF_RANGE:
+			fprintf(stderr, "Input out of range\n");
+			exit(INPUT_ERROR);
+		case PLN_SEAT_FILLED:
+			fprintf(stderr, "Seat filled \n");
+			exit(INPUT_ERROR);
+		default:
+			fprintf(stderr, "Error: Get to seat failed\n");
+			exit(-1);
+	}
+	
+}
+
+void inputEnableSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	Plane currentPlane;
+	inputLoadPlane(&currentPlane, fileName);
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		fprintf(stderr, "Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+
+	PlaneErrors plnError = clearSeat(&currentPlane, column, row);
+
+	switch (plnError)
+	{
+		case PLN_SUCCESS:
+			savePlane(&currentPlane, fileName);
+			printf("Success! Enabled seat on %s\n", seatPosition);
+			break;
+		case PLN_OUT_OF_RANGE:
+			fprintf(stderr, "Seat is out of range\n");
+			exit(INPUT_ERROR);		
+		case PLN_SEAT_NOT_FILLED:
+			fprintf(stderr, "Seat is not filled\n");
+			exit(INPUT_ERROR);
+		default:
+			fprintf(stderr, "Error: Failed to disable seat\n");
+			exit(-1);
+	}
+	
+}
+
+void inputViewAccountInSeat(const char fileName[], const char seatPosition[])
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	
+	Plane currentPlane;
+	inputLoadPlane(&currentPlane, fileName);
+
+	int column;
+	int row;
+	if (!inputConvertFormattedSeat(seatPosition, &column, &row))
+	{
+		fprintf(stderr,"Invalid seat input: %s\n", seatPosition);
+		exit(INPUT_ERROR);
+	}
+
+	int seatAccountID;
+	if (getValueOfSeat(&seatAccountID, &currentPlane, column, row) == PLN_OUT_OF_RANGE)
+	{
+		fprintf(stderr, "Seat input out of range\n");
+		exit(INPUT_ERROR);
+	}
+
+	if (seatAccountID < -1)
+	{
+		fprintf(stderr, "Seat is unavailable for this plane\n");
+		exit(INPUT_ERROR);
+	}
+	
+	Account account;	
+	if (findAccount(&account, seatAccountID) == AE_CANNOT_FIND_ACCOUNT)
+	{
+		fprintf(stderr, "Cannot find account\n");
+		exit(FILE_READ_ERROR);
+	}
+
+	printf("User: %d \nName: %s %s \nAge: %d\n", account.iD, account.firstName, account.lastName, account.age);
 }
 
 bool stringIsInt(const char string[])
@@ -456,17 +562,34 @@ bool stringIsInt(const char string[])
 
 bool inputConvertFormattedSeat(const char formattedInput[], int* column, int* row)
 {
-	if (strlen(formattedInput) != 2)  return false;
+	unsigned long stringLength = strlen(formattedInput);
+	if (stringLength > 3 || stringLength < 2)  return false;
 
+	if (stringLength == 2)
+	{
+		if (!isalpha(formattedInput[1]))  return false;
+	
+		char formattedRow = formattedInput[0];
 
-	if (!isalpha(formattedInput[1]))  return false;
+		if (formattedRow < '0' || formattedRow > '9')  return false;
+		char formattedColumn = toupper(formattedInput[1]);
+	
+		*row = formattedRow - '0' - 1;
+		*column = formattedColumn - 'A';
+	}
+	else if (stringLength == 3)
+	{
+		if (!isalpha(formattedInput[2]))  return false;
 
-	char formattedRow = toupper(formattedInput[0]);
-	char formattedColumn = toupper(formattedInput[1]);
+		char formattedRow[3] = {formattedInput[0], formattedInput[1], '\0'};
+		if (!stringIsInt(formattedRow))  return false;
 
-	*row = formattedRow - '0' - 1;
-	*column = formattedColumn - 'A';
+		char formattedColumn = toupper(formattedInput[2]);
 
+		*row = atoi(formattedRow) - 1;
+		*column = formattedColumn - 'A';
+	}
+	
 	return true;
 }
 
@@ -493,3 +616,49 @@ void getAccountSeat(const Account* account, const Plane* plane, int* column, int
 	}
 
 }
+
+void inputLoadSessionInfo(Account* sessionInfo)
+{
+ 	if (loadSessionInfo(sessionInfo, sizeof(Account)) == SS_NO_ACTIVE_SESSION_FOUND)
+ 	{
+ 		fprintf(stderr, "Error: Session file not found. Have you logged in? \n");
+		exit(FILE_READ_ERROR);
+ 	}
+}
+
+void inputLoadPlane(Plane* plane, const char fileName[])
+{
+	if (loadPlane(plane, fileName) == PLN_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to load plane\n");
+		exit(FILE_READ_ERROR);
+	}
+}
+
+
+void inputDebugMakeAdmin()
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (debugMakeAccountAdmin(sessionInfo.iD) == AE_FILE_OPEN_FAILED)
+	{
+		fprintf(stderr, "Error: Failed to open account file\n");
+		exit(FILE_READ_ERROR);
+	}
+}
+
+void inputShowAccounts()
+{
+	Account sessionInfo;
+	inputLoadSessionInfo(&sessionInfo);
+
+	if (!sessionInfo.isAdmin)
+	{
+		fprintf(stderr, "Account doesn't have administrator privilages\n");
+		exit(NO_ADMIN_PRIVILAGES);
+	}
+
+	listAllAccounts();
+}
+

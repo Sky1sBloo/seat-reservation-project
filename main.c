@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "account.h"
 #include "input-handler.h"
 
 void showHelpPrint()
@@ -19,7 +18,13 @@ void showHelpPrint()
 			"--view-account-information                 | Views name, ID, and age of the user\n"
 			"--change-account-name [first] [lastname]   | Changes account username\n"
 			"--change-account-password [old] [new]      | Changes account password\n"
-			"--change-account-age [age]                 | Change account age\n"
+			"--change-account-age [age]                 | Change account age\n\n\n\n"
+			"Requires administrator privilages:\n"
+			"--debug-show-accounts                      | Lists all accounts\n"
+			"--enable-seat [filename] [seat]            | enables seats to be active \n"
+			"--disable-seat [filename] [seat]           | disables seats\n"
+			"--view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
+			"--debug-make-admin                         | Makes userID admin\n"
 			);
 
 }
@@ -69,13 +74,13 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--display") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputDisplayPlane(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--go-to-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seatPosition = argv[++i];
 			
@@ -84,7 +89,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--move-to-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
 			const char* seatPosition = argv[++i];
 
@@ -92,19 +97,19 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--clear-current-seat") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputClearAccountSeat(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--create") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1))  return 1;
+			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputCreatePlane(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--login") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2))  return 1;
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 
 			const char* accountID = argv[++i];
 			const char* password = argv[++i];
@@ -125,7 +130,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-name") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
 			const char* firstName = argv[++i];
 			const char* lastName = argv[++i];
@@ -134,7 +139,7 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-password") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 2)) return 1;
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
 			const char* oldPassword = argv[++i];
 			const char* newPassword = argv[++i];
@@ -143,13 +148,42 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[i], "--change-account-age") == 0)
 		{
-			if (!argumentIsSupplied(argc, i, 1)) return 1;
+			if (!argumentIsSupplied(argc, i, 1)) return INPUT_ERROR;
 
 			inputChangeAccountAge(argv[++i]);
 		}
 		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
 		{
-			listAllAccounts();
+			inputShowAccounts();
+		}
+		else if (strcmp(argv[i], "--enable-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputEnableSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--disable-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputDisableSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--view-account-in-seat") == 0)
+		{
+			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
+
+			const char* fileName = argv[++i];
+			const char* seat = argv[++i];
+
+			inputViewAccountInSeat(fileName, seat);
+		}
+		else if (strcmp(argv[i], "--debug-make-admin") == 0)
+		{
+			inputDebugMakeAdmin();
 		}
 		else
 		{

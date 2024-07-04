@@ -3,6 +3,7 @@
  */
 
 #pragma once
+#include <stdbool.h>
 
 #define ACCOUNT_FILE "accounts.dat"
 #define ACCOUNT_UPDATE_FILE "account-temp.dat"  // Name of the new file when updated (gets quickly removed)
@@ -15,12 +16,15 @@ typedef struct Account
 	char firstName[NAME_LENGTH];
 	char lastName[NAME_LENGTH];
 	char password[PASSWORD_LENGTH];
-	unsigned char age; } Account;
+	unsigned char age; 
+	bool isAdmin;
+} Account;
 
 typedef enum
 {
 	AE_SUCCESS,
 	AE_WRONG_USER_OR_PASSWORD,
+	AE_CANNOT_FIND_ACCOUNT,
 	AE_FILE_OPEN_FAILED,
 	AE_FILE_CREATE_FAILED,
 	AE_FILE_REMOVE_FAILED,
@@ -119,3 +123,24 @@ AccountError changeAccountAge(Account* account, unsigned char newAge);
 
 /// Views all possible accounts and their information
 void listAllAccounts();
+
+/**
+ * Finds the corresponding acconut from accountiD
+ *
+ * @param[out] account Output of the searched account
+ * @param[in] accountiD of the account to be searched
+ *
+ * @return
+ *  AE_CANNOT_FIND_ACCOUNT - Cannot find specific account based on ID
+ *  AE_SUCCESS
+ */
+AccountError findAccount(Account* account, int accountiD);
+
+/** 
+ * Makes the account have admin privilages
+ *
+ * @return
+ *  AE_FILE_OPEN_FAILED
+ *  AE_SUCCESS
+ */
+AccountError debugMakeAccountAdmin(int accountID);

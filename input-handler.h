@@ -11,6 +11,7 @@
 #define FILE_READ_ERROR 3
 #define FILE_ERROR 4
 #define INPUT_ERROR 5
+#define NO_ADMIN_PRIVILAGES 6
 
 
 /// Prints filled seat in plane
@@ -52,6 +53,15 @@ void inputClearAccountSeat(const char fileName[]);
 /// Moves account seat to new area
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
 
+/// Disables seat (requires admin privilages)
+void inputDisableSeat(const char fileName[], const char seatPosition[]);
+
+/// Enables seat
+void inputEnableSeat(const char fileName[], const char seatPosition[]);
+
+/// Prints account in specific seat
+void inputViewAccountInSeat(const char fileName[], const char seatPosition[]);
+
 /// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
 
@@ -84,3 +94,21 @@ void inputConvertSeatToFormatted(int column, int row, char formattedInput[2]);
  */
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row);
 
+/**
+ * Loads session with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadSessionInfo(Account* sessionInfo);
+
+/**
+ * Loads plane with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadPlane(Plane* plane, const char fileName[]);
+
+/// Makes current user admin
+void inputDebugMakeAdmin();
+
+void inputShowAccounts();
