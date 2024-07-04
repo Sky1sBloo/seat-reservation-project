@@ -33,6 +33,12 @@ void showMissingArgumentsMessage()
 	fprintf(stderr, "Missing arguments, use --help for correct usage\n");
 }
 
+/// Checks if argument matches with either target arguments
+bool isArgumentMatch(const char argument[], const char targetArgument[], const char alternativeArgument[])
+{
+	return (strcmp(argument, targetArgument) == 0 || strcmp(argument, alternativeArgument) == 0);
+}
+
 /**
  * Checks if the argument supplied by the user is enough
  * Also does the printing error
@@ -67,17 +73,17 @@ int main(int argc, char* argv[])
 	// Argument mode
 	for (int i = 1; i < argc; i++)
 	{
-		if (strcmp(argv[i], "--help") == 0)
+		if (isArgumentMatch(argv[i], "--help", "-h"))
 		{
 			showHelpPrint();
 		}
-		else if (strcmp(argv[i], "--display") == 0)
+		else if (isArgumentMatch(argv[i],"--display", "-d"))
 		{
 			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputDisplayPlane(argv[++i]);
 		}
-		else if (strcmp(argv[i], "--go-to-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--go-to-seat", "-g"))
 		{
 			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
@@ -86,7 +92,7 @@ int main(int argc, char* argv[])
 
 			inputGoToSeat(fileName, seatPosition);
 		}
-		else if (strcmp(argv[i], "--move-to-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--move-to-seat", "-m"))
 		{
 			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 			const char* fileName = argv[++i];
@@ -94,19 +100,19 @@ int main(int argc, char* argv[])
 
 			inputMoveAccountSeat(fileName, seatPosition);
 		}
-		else if (strcmp(argv[i], "--clear-current-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--clear-current-seat", "-s"))
 		{
 			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputClearAccountSeat(argv[++i]);
 		}
-		else if (strcmp(argv[i], "--create") == 0)
+		else if (isArgumentMatch(argv[i], "--create", "-c"))
 		{
 			if (!argumentIsSupplied(argc, i, 1))  return INPUT_ERROR;
 
 			inputCreatePlane(argv[++i]);
 		}
-		else if (strcmp(argv[i], "--login") == 0)
+		else if (isArgumentMatch(argv[i], "--login", "-l"))
 		{
 			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 
@@ -115,19 +121,19 @@ int main(int argc, char* argv[])
 			
 			inputLogin(accountID, password);
 		}
-		else if (strcmp(argv[i], "--logout") == 0)
+		else if (isArgumentMatch(argv[i], "--logout", "-o"))
 		{
 			inputLogout();
 		}
-		else if (strcmp(argv[i], "--register") == 0)
+		else if (isArgumentMatch(argv[i], "--register", "-r"))
 		{
 			inputRegister();
 		}
-		else if (strcmp(argv[i], "--view-account-information") == 0)
+		else if (isArgumentMatch(argv[i], "--view-account-information", "-v"))
 		{
 			viewAccountInformation();
 		}
-		else if (strcmp(argv[i], "--change-account-name") == 0)
+		else if (isArgumentMatch(argv[i], "--change-account-name", "n"))
 		{
 			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
@@ -136,7 +142,7 @@ int main(int argc, char* argv[])
 			
 			inputChangeAccountName(firstName, lastName);
 		}
-		else if (strcmp(argv[i], "--change-account-password") == 0)
+		else if (isArgumentMatch(argv[i], "--change-account-password", "-p"))
 		{
 			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
@@ -145,17 +151,17 @@ int main(int argc, char* argv[])
 
 			inputChangeAccountPassword(oldPassword, newPassword);
 		}
-		else if (strcmp(argv[i], "--change-account-age") == 0)
+		else if (isArgumentMatch(argv[i], "--change-account-age", "-a"))
 		{
 			if (!argumentIsSupplied(argc, i, 1)) return INPUT_ERROR;
 
 			inputChangeAccountAge(argv[++i]);
 		}
-		else if (strcmp(argv[i], "--debug-show-accounts") == 0)
+		else if (isArgumentMatch(argv[i], "--debug-show-accounts", "-D"))
 		{
 			inputShowAccounts();
 		}
-		else if (strcmp(argv[i], "--enable-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--enable-seat", "-e"))
 		{
 			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 			const char* fileName = argv[++i];
@@ -163,7 +169,7 @@ int main(int argc, char* argv[])
 
 			inputEnableSeat(fileName, seat);
 		}
-		else if (strcmp(argv[i], "--disable-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--disable-seat", "-x"))
 		{
 			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 			const char* fileName = argv[++i];
@@ -171,7 +177,7 @@ int main(int argc, char* argv[])
 
 			inputDisableSeat(fileName, seat);
 		}
-		else if (strcmp(argv[i], "--view-account-in-seat") == 0)
+		else if (isArgumentMatch(argv[i], "--view-account-in-seat", "-i"))
 		{
 			if (!argumentIsSupplied(argc, i, 2))  return INPUT_ERROR;
 
@@ -180,7 +186,7 @@ int main(int argc, char* argv[])
 
 			inputViewAccountInSeat(fileName, seat);
 		}
-		else if (strcmp(argv[i], "--debug-make-admin") == 0)
+		else if (isArgumentMatch(argv[i], "--debug-make-admin", "-A"))
 		{
 			inputDebugMakeAdmin();
 		}
