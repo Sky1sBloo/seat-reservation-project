@@ -30,8 +30,17 @@ typedef enum
 // Initializes an empty plane (sets the value of the array to -1)
 Plane initPlane();
 
-// Prints the contents of the plane
-void printPlane(const Plane* plane);
+/**
+ * Prints the contents of the plane
+ * 
+ * Symbols:
+ * + - Target
+ * x - Filled
+ * 9B - not filled
+ *
+ * @param targetValue Make negative value if you aren't targeting anything
+ */
+void printPlane(const Plane* plane, int targetValue);
 
 /**
  * Saves the plane into a dat file
