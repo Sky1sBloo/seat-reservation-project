@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "input-handler.h"
@@ -31,6 +32,7 @@ void showHelpPrint()
 void showMissingArgumentsMessage()
 {
 	fprintf(stderr, "Missing arguments, use --help for correct usage\n");
+	exit(INPUT_ERROR);
 }
 
 /// Checks if argument matches with either target arguments
