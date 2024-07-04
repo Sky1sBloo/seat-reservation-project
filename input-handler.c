@@ -531,6 +531,12 @@ void inputViewAccountInSeat(const char fileName[], const char seatPosition[])
 		fprintf(stderr, "Seat input out of range\n");
 		exit(INPUT_ERROR);
 	}
+
+	if (seatAccountID < -1)
+	{
+		fprintf(stderr, "Seat is unavailable for this plane\n");
+		exit(INPUT_ERROR);
+	}
 	
 	Account account;	
 	if (findAccount(&account, seatAccountID) == AE_CANNOT_FIND_ACCOUNT)
