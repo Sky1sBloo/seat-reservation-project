@@ -6,27 +6,26 @@
 
 void showHelpPrint()
 {
-	printf("--help                         		   | List help commands\n"
-			"--register                                 | Registers new user\n"
-			"--login [accountID] [password]             | Logs in using credentials\n"
-			"--logout                                   | Logs out user \n"
-			"--create [filename]                        | Creates new plane\n"
-			"--display [filename]                       | Display current plane contents\n"
-			"--go-to-seat [filename] [seat]             | Goes to the seat of the plane\n"
-			"--clear-current-seat [filename]            | Clears the current seat assigned to the plane\n"
-			"--move-to-seat [filename] [seat]           | Moves to the new seat\n"
-			"--view-account-information                 | Views name, ID, and age of the user\n"
-			"--change-account-name [first] [lastname]   | Changes account username\n"
-			"--change-account-password [old] [new]      | Changes account password\n"
-			"--change-account-age [age]                 | Change account age\n\n\n\n"
+	printf("-h, --help                         		   | List help commands\n"
+			"-r, --register                                 | Registers new user\n"
+			"-l, --login [accountID] [password]             | Logs in using credentials\n"
+			"-o, --logout                                   | Logs out user \n"
+			"-c, --create [filename]                        | Creates new plane\n"
+			"-d, --display [filename]                       | Display current plane contents\n"
+			"-g, --go-to-seat [filename] [seat]             | Goes to the seat of the plane\n"
+			"-s, --clear-current-seat [filename]            | Clears the current seat assigned to the plane\n"
+			"-m, --move-to-seat [filename] [seat]           | Moves to the new seat\n"
+			"-v, --view-account-information                 | Views name, ID, and age of the user\n"
+			"-n, --change-account-name [first] [lastname]   | Changes account username\n"
+			"-p, --change-account-password [old] [new]      | Changes account password\n"
+			"-a, --change-account-age [age]                 | Change account age\n\n\n\n"
 			"Requires administrator privilages:\n"
-			"--debug-show-accounts                      | Lists all accounts\n"
-			"--enable-seat [filename] [seat]            | enables seats to be active \n"
-			"--disable-seat [filename] [seat]           | disables seats\n"
-			"--view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
-			"--debug-make-admin                         | Makes userID admin\n"
+			"-D, --debug-show-accounts                      | Lists all accounts\n"
+			"-e, --enable-seat [filename] [seat]            | enables seats to be active \n"
+			"-x, --disable-seat [filename] [seat]           | disables seats\n"
+			"-i, --view-account-in-seat [filename] [seat]   | Views the account info in seat\n"
+			"-A, --debug-make-admin                         | Makes userID admin\n"
 			);
-
 }
 
 void showMissingArgumentsMessage()
