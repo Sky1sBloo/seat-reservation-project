@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 		{
 			viewAccountInformation();
 		}
-		else if (isArgumentMatch(argv[i], "--change-account-name", "n"))
+		else if (isArgumentMatch(argv[i], "--change-account-name", "-n"))
 		{
 			if (!argumentIsSupplied(argc, i, 2)) return INPUT_ERROR;
 
