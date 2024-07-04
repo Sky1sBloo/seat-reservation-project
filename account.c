@@ -18,10 +18,57 @@ AccountError createNewAccount(const char* firstName, const char* lastName, const
 	strcpy(newAccount->lastName, lastName);
 	strcpy(newAccount->password, password);
 	newAccount->age = age;
+	newAccount->isAdmin = false;
 
 	fwrite(newAccount, sizeof(Account), 1, accountFile);
 
 	fclose(accountFile);
+
+	return AE_SUCCESS;
+}
+
+AccountError updateAccount(int accountID, const Account* newAccount)
+{
+	FILE* oldAccountFile;
+	oldAccountFile = fopen(ACCOUNT_FILE, "rb");
+
+	if (oldAccountFile == NULL)
+	{
+		return AE_FILE_OPEN_FAILED;
+	}
+
+	FILE* newAccountFile;
+	newAccountFile = fopen(ACCOUNT_UPDATE_FILE, "wb");
+
+	if (newAccountFile == NULL)
+	{
+		return AE_FILE_CREATE_FAILED;
+	}
+
+	Account iAccount;
+	while (fread(&iAccount, sizeof(Account), 1, oldAccountFile) > 0)
+	{
+		if (iAccount.iD == accountID)
+		{
+			fwrite(newAccount, sizeof(Account), 1, newAccountFile);
+		}
+		else
+		{
+			fwrite(&iAccount, sizeof(Account), 1, newAccountFile);
+		}
+	}
+
+	fclose(oldAccountFile);
+	fclose(newAccountFile);
+
+	if (remove(ACCOUNT_FILE) == -1)
+	{
+		return AE_FILE_REMOVE_FAILED;
+	}
+	if (rename(ACCOUNT_UPDATE_FILE, ACCOUNT_FILE) == -1)
+	{
+		return AE_FILE_RENAME_FAILED;
+	}
 
 	return AE_SUCCESS;
 }
@@ -119,8 +166,53 @@ void listAllAccounts()
 	Account iAccount;
 	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
 	{
-		printf("ID: %d, Usr: %s\n", iAccount.iD, iAccount.firstName);
+		printf("ID: %d, User: %s %s, Age: %d, Password: %s\n", iAccount.iD, iAccount.firstName, iAccount.lastName,
+				 iAccount.age, iAccount.password);
 	}
 	
 	fclose(accountFile);
+}
+
+AccountError findAccount(Account* account, int accountiD)
+{
+	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");
+	Account iAccount;
+
+	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
+	{
+		if (iAccount.iD == accountiD)
+		{
+			*account = iAccount;
+			fclose(accountFile);
+			return AE_SUCCESS;
+		}
+	}
+
+	fclose(accountFile);
+	return AE_CANNOT_FIND_ACCOUNT;
+}
+
+AccountError debugMakeAccountAdmin(int accountID)
+{
+	FILE* accountFile = fopen(ACCOUNT_FILE, "rb");
+
+	if (accountFile == NULL)
+	{
+		return AE_FILE_OPEN_FAILED;
+	}
+
+	Account iAccount;
+	while (fread(&iAccount, sizeof(Account), 1, accountFile) > 0)
+	{
+		if (iAccount.iD == accountID)
+		{
+			iAccount.isAdmin = true;
+			break;
+		}
+	}
+
+	fclose(accountFile);
+	updateAccount(iAccount.iD, &iAccount);
+
+	return AE_SUCCESS;
 }

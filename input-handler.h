@@ -7,6 +7,13 @@
 #include "account.h"
 #include "plane.h"
 
+#define FILE_WRITE_ERROR 2
+#define FILE_READ_ERROR 3
+#define FILE_ERROR 4
+#define INPUT_ERROR 5
+#define NO_ADMIN_PRIVILAGES 6
+
+
 /// Prints filled seat in plane
 void inputDisplayPlane(const char fileName[]);
 
@@ -22,6 +29,21 @@ void inputLogout();
 /// Creates a new account 
 void inputRegister();
 
+/// Views the account information
+void viewAccountInformation();
+
+/// Calls update account with error messages and exits if failes
+bool updateInputAccount(int accountID, const Account* newAccount);
+
+/// Changes accoount name
+void inputChangeAccountName(const char firstName[], const char lastName[]);
+
+/// Changes account password with verification
+void inputChangeAccountPassword(const char oldPassword[], const char newPassword[]);
+
+/// Changes account age
+void inputChangeAccountAge(const char newAge[]);
+
 /// Sets user to seat
 void inputGoToSeat(const char fileName[], const char seatPosition[]);
 
@@ -30,6 +52,15 @@ void inputClearAccountSeat(const char fileName[]);
 
 /// Moves account seat to new area
 void inputMoveAccountSeat(const char fileName[], const char seatPosition[]);
+
+/// Disables seat (requires admin privilages)
+void inputDisableSeat(const char fileName[], const char seatPosition[]);
+
+/// Enables seat
+void inputEnableSeat(const char fileName[], const char seatPosition[]);
+
+/// Prints account in specific seat
+void inputViewAccountInSeat(const char fileName[], const char seatPosition[]);
 
 /// Checks if the string is a number (positive)
 bool stringIsInt(const char string[]);
@@ -62,3 +93,22 @@ void inputConvertSeatToFormatted(int column, int row, char formattedInput[2]);
  * @param row Row of account seat, returns -1 when it cannot be found
  */
 void getAccountSeat(const Account* account, const Plane* plane, int* column, int* row);
+
+/**
+ * Loads session with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadSessionInfo(Account* sessionInfo);
+
+/**
+ * Loads plane with exit paths
+ * 
+ * @param[out] sessionInfo Output data from session
+ */
+void inputLoadPlane(Plane* plane, const char fileName[]);
+
+/// Makes current user admin
+void inputDebugMakeAdmin();
+
+void inputShowAccounts();
