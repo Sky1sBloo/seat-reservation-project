@@ -416,7 +416,7 @@ void inputMoveAccountSeat(const char fileName[], const char seatPosition[])
 			fprintf(stderr, "Seat is out of range\n");
 			exit(INPUT_ERROR);
 		case PLN_SEAT_FILLED:
-			fprintf(stderr, "New seat is filled\n");
+			fprintf(stderr, "Error: Target seat is currently filled\n");
 			exit(INPUT_ERROR);
 		case PLN_SEAT_NOT_FILLED:
 			fprintf(stderr, "Error: Previous seat not filled check implementation.\n");
